@@ -8,6 +8,9 @@ class Reticulado(object):
     def __init__(self):
         super(Reticulado, self).__init__()       
         """Implementar"""
+        #
+        #self.Reticulado=Reticulado
+        #
         self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype = np.double)
         self.Nnodos = 0	
         self.barras = []
@@ -26,27 +29,27 @@ class Reticulado(object):
         return 0
 
     def agregar_barra(self, barra):
-        """Implementar"""	
-        self.barras.append(barra)
+        self.barras.append(barra)	
         return 0
 
     def obtener_coordenada_nodal(self, n):
-        """Implementar"""	
-        
-        return 0
+        if n>= self.Nnodos:
+            return
+        return self.xyz[n, :]
+    	
 
     def calcular_peso_total(self):
-        """Implementar"""	
-        
-        return 0
+        """Implementar"""
+        peso=0
+        for b in self.barras:
+            peso+=b.calcular_peso(self)	 
+        return peso
 
     def obtener_nodos(self):
-        """Implementar"""	
         
-        return self.xyz
+        return self.xyz[0:self.Nnodos,:].copy()
 
-    def obtener_barras(self):
-        """Implementar"""	
+    def obtener_barras(self):	
         
         return self.barras
 
@@ -105,17 +108,13 @@ class Reticulado(object):
         return 0
 
 
-
-
-
-
-
     def __str__(self):
 
-        s = "Soy un reticulado :)"
+        s = "Soy un reticulado"
 
         s += "\n"
 
-        s = += str(self.xyz[0 : self.Nnodos,:])
+        s += str(self.xyz[0 : self.Nnodos,:])
+        #parte en 0 y llega hasta Nnodos tomando todos los valores que estan ahí (:)
 
         return s
