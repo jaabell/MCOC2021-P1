@@ -44,9 +44,11 @@ opc_barras_default = {
     "usar_posicion_deformada": False,
     "factor_amplificacion_deformada": 1.,
     "datos_desplazamientos_nodales": None,
+    "ver_secciones_en_barras": False,
+    "color_barras_por_seccion": False,
 }
 
-def graficar_nodos(ret, fig,  opciones):
+def graficar_nodos(ret, fig, opciones):
 
     for key in opc_nodos_default:
         if key not in opciones:
@@ -97,7 +99,7 @@ def graficar_barras(ret, fig, opciones):
             u = opciones["datos_desplazamientos_nodales"]
         factor = opciones ["factor_amplificacion_deformada"]
         uvw = u.reshape((-1,3))
-        xyz = xyz +  factor*uvw
+        xyz +=  factor*uvw
 
     if opciones["color_barras_por_dato"]:
         f = opciones["dato"]
@@ -125,6 +127,9 @@ def graficar_barras(ret, fig, opciones):
                 xi = 1-(fmax - f[i])/(fmax - 0)
                 c = xi*c_max + (1-xi)*c_cero
 
+        if opciones["color_barras_por_seccion"]:
+            c = b.seccion.color
+
         ax.plot(x,y,z,
             linestyle=opciones["estilo_barras"],
             color=c,
@@ -137,7 +142,10 @@ def graficar_barras(ret, fig, opciones):
             z0 = z.mean()
             th = 0#np.rad2deg(np.arctan2(y[1]-y[0],x[1]-x[0]))
             if txt_case == 1:
-                txt = f"{i}"
+                if opciones["ver_secciones_en_barras"]:
+                    txt = ("{0} : {1}").format(i,b.seccion.nombre())
+                else:
+                    txt = f"{i}"
             elif txt_case == 2:
                 txt = ("{0:"+fmt+"}").format(f[i])
             else:

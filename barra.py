@@ -35,10 +35,8 @@ class Barra(object):
         return self.seccion.area()
 
     def calcular_peso(self, reticulado):
-
+        """Implementar"""
         return ((self.calcular_area())*(self.calcular_largo(reticulado))*(ρ_acero)*(g_))
-
-
 
 
     def obtener_rigidez(self, ret):
