@@ -31,7 +31,7 @@ class Barra(object):
             
         largo = np.sqrt(np.sum((xi - xj)**2))
         
-        print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}")
+        #print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}")
 
         return largo
     
