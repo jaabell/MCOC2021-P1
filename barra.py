@@ -31,7 +31,7 @@ class Barra(object):
 
         print(f"Barra {ni} a {nj} ")
 
-        return np.mod(xj - xi)
+        return np.linalg.norm(xj - xi)
 
     def calcular_area(self):
         return self.seccion.area()
