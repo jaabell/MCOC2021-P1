@@ -71,7 +71,7 @@ class Reticulado(object):
         return 0
 
 
-    def ensamblar_sistema(self):
+    def ensamblar_sistema(self, factor_peso_propio=0.):
         
         """Implementar"""	
         

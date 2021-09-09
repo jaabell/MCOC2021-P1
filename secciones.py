@@ -15,7 +15,7 @@ class Circular(object):
         return pi*(self.D**2 - self.Dint**2)/4
 
     def peso(self):
-        return self.area()*ρ_acero*g
+        return self.area()*ρ_acero*g_
 
     def inercia_xx(self):
         return pi*(self.D**4 - self.Dint**4)/4
@@ -29,7 +29,6 @@ class Circular(object):
     def __str__(self):
         return f"Seccion Circular {self.nombre()}"
 
-
         
 #Mas adelante, no es para P1E1
 
@@ -41,7 +40,6 @@ class SeccionICHA(object):
         self.denominacion = denominacion
         self.color = color  #color para la seccion
 
-        
     def area(self):
         return 0
 
