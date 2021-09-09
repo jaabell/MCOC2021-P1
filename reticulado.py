@@ -21,7 +21,7 @@ class Reticulado(object):
     def agregar_nodo(self, x, y, z=0):
         """Implementar"""	
 
-        print(f"Quiero agregar un nodo en ({x} {y} {z})")
+        #print(f"Quiero agregar un nodo en ({x} {y} {z})")
         numero_de_nodo_actual = self.Nnodos
         self.xyz[numero_de_nodo_actual,:] = [x, y, z]
 
@@ -110,11 +110,20 @@ class Reticulado(object):
 
     def __str__(self):
 
-        s = "Soy un reticulado"
+        s = "nodos: \n"
+
+        for i in range(len(self.xyz[0: self.Nnodos,:])):
+            s += "  " + str(i) + ": " + "(" + str(self.xyz[i,0]) + ", " + str(self.xyz[i,1]) + ", " + str(self.xyz[i,2]) + ")"
+            s+= "\n"
+        #parte en 0 y llega hasta Nnodos tomando todos los valores que estan ahí (:)
 
         s += "\n"
+        s += "\n"
 
-        s += str(self.xyz[0 : self.Nnodos,:])
-        #parte en 0 y llega hasta Nnodos tomando todos los valores que estan ahí (:)
+        s+= "barras: \n"
+
+        for i in range(len(self.barras)):
+            s += "  " + str(i) + ": " + "[ " + str(self.barras[i].ni) + " " + str(self.barras[i].nj) + " ]"
+            s += "\n"
 
         return s

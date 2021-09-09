@@ -29,8 +29,6 @@ class Barra(object):
         xi = reticulado.xyz[ni,:]
         xj = reticulado.xyz[nj,:]
 
-        print(f"Barra {ni} a {nj} ")
-
         return np.linalg.norm(xj - xi)
 
     def calcular_area(self):
