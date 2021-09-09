@@ -126,11 +126,15 @@ class Reticulado(object):
 
 
     def __str__(self):
-
-        s = "Soy un reticulado :)"
-
-        s += "\n"
         
-        s += str(self.xyz[0 : self.Nnodos,:])
-
+        s="nodos: \n"
+        for i in range(self.Nnodos):
+            s+=f"\t {i}: ({self.xyz[i][0]} {self.xyz[i][1]} {self.xyz[i][2]}) \n"
+        s+="\n"
+        s+="barras: \n"
+        for i,j in enumerate(self.barras,start=0):
+            s+=f"\t {i}: [{j.ni} {j.nj}] \n"
+        s+="\n"
+        
         return s
+        
