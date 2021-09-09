@@ -22,14 +22,27 @@ b1 = Barra(0, 1, circular_200_40)
 b2 = Barra(1, 2, circular_200_40)
 b3 = Barra(0, 2, circular_200_40)
 
+l1 = b1.calcular_largo(ret)
+l2 = b2.calcular_largo(ret)
+l3 = b3.calcular_largo(ret)
+
+
+
+
 ret.agregar_barra(b1)
 ret.agregar_barra(b2)
 ret.agregar_barra(b3)
 
-print(ret)
+# ACA SE IMPRIMEN LOS NODOS DEL RETICULADO
 
+print("Nodos:")
+posicion_nodal = ret.obtener_coordenada_nodal(0)
+posicion_nodal = ret.obtener_coordenada_nodal(1)
+posicion_nodal = ret.obtener_coordenada_nodal(2)
 peso_total = ret.calcular_peso_total()
 
-print(f"peso_total = {peso_total}")
 
+
+print(f"peso_total = {peso_total}")
+# print(f"a: {posicion_nodal}")
 ver_reticulado_2d(ret)
