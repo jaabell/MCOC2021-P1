@@ -16,15 +16,13 @@ class Reticulado(object):
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
-        """Implementar"""	
+        	
         
 
 
     def agregar_nodo(self, x, y, z=0):
         
-        """Implementar"""	
-
-        print(f"Quiero agregar un nodo en ({x} {y} {z})")
+        
         numero_de_nodo_actual = self.Nnodos
 
         self.xyz[numero_de_nodo_actual,:] = [x, y, z]
@@ -41,15 +39,14 @@ class Reticulado(object):
 
     def obtener_coordenada_nodal(self, n):
         
-        """Implementar"""	
-        
-        return 0
+        return np.array(self.xyz[n,:])
 
     def calcular_peso_total(self):
+        res = 0
         
-        """Implementar"""	
-        
-        return 0
+        for i in self.barras: res+= i.calcular_peso(self);
+            
+        return res
 
     def obtener_nodos(self):
         
@@ -129,11 +126,15 @@ class Reticulado(object):
 
 
     def __str__(self):
-
-        s = "Soy un reticulado :)"
-
-        s += "\n"
         
-        s += str(self.xyz[0 : self.Nnodos,:])
-
+        s="nodos: \n"
+        for i in range(self.Nnodos):
+            s+=f"\t {i}: ({self.xyz[i][0]} {self.xyz[i][1]} {self.xyz[i][2]}) \n"
+        s+="\n"
+        s+="barras: \n"
+        for i,j in enumerate(self.barras,start=0):
+            s+=f"\t {i}: [{j.ni} {j.nj}] \n"
+        s+="\n"
+        
         return s
+        
