@@ -123,26 +123,27 @@ class Reticulado(object):
         return 0
 
 
-
-
-
-        
     def __str__(self):
         
         barras = self.obtener_barras()
         
         numero = 0
-        
+        print ("barras :")
         for k in barras :
-            print ("barra : " + str(numero))
-            print ((k.ni,k.nj))
+            
+            
+            print  (str(numero) + " : " + str(((k.ni,k.nj))))
+         
             numero +=1
         
         nodos = self.obtener_nodos()
         numero = 0
+        k = 0
         
-        for k in nodos:
-            print ("nodo" + str(numero) + " = " + str(k))
-            numero += 1
+      
+        while k < len(self.xyz):
             
-   
+            print ("nodo" + str(numero) + " = " + str(nodos[numero]))
+            
+            k += 1
+            numero +=1
