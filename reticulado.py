@@ -42,12 +42,26 @@ class Reticulado(object):
     def obtener_coordenada_nodal(self, n):
         
         """Implementar"""	
+     
+        coordenada_nodal = self.xyz[n]
+        print(f"{n}: {coordenada_nodal}")
+        return (coordenada_nodal)
         
-        return 0
-
+        
+        
+        
     def calcular_peso_total(self):
         
         """Implementar"""	
+        
+        peso_total = 0
+        for i in self.barras:
+            peso_total += i.calcular_peso(self)
+        return peso_total
+        
+        
+        
+        
         
         return 0
 
