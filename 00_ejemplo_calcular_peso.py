@@ -41,3 +41,5 @@ peso_total = ret.calcular_peso_total()
 print(f"peso_total = {peso_total}")
 # print(f"a: {posicion_nodal}")
 ver_reticulado_2d(ret)
+
+ret.__str__()
