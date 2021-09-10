@@ -154,7 +154,7 @@ class Reticulado(object):
         numero = 0
         k = 0
         
-      
+        
         while k < len(self.xyz):
             
             print ("nodo" + str(numero) + " = " + str(nodos[numero]))
