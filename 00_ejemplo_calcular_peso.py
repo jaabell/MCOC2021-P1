@@ -33,12 +33,7 @@ ret.agregar_barra(b1)
 ret.agregar_barra(b2)
 ret.agregar_barra(b3)
 
-# ACA SE IMPRIMEN LOS NODOS DEL RETICULADO
 
-print("Nodos:")
-posicion_nodal = ret.obtener_coordenada_nodal(0)
-posicion_nodal = ret.obtener_coordenada_nodal(1)
-posicion_nodal = ret.obtener_coordenada_nodal(2)
 peso_total = ret.calcular_peso_total()
 
 
