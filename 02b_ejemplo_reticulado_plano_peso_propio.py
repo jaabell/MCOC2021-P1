@@ -40,7 +40,7 @@ for n in range(ret.Nnodos):
 	ret.agregar_restriccion(n, 2, 0.)
 
 #Cargar el nodo 4 en la direccion 1 (Y)
-ret.agregar_fuerza(4, 1, -100*KN_)
+# ret.agregar_fuerza(4, 1, -100*KN_)
 
 #Visualizar y comprobar las secciones
 opciones_barras = {
@@ -49,7 +49,7 @@ opciones_barras = {
 ver_reticulado_2d(ret,opciones_barras=opciones_barras)
 
 #Resolver el problema
-ret.ensamblar_sistema()
+ret.ensamblar_sistema(factor_peso_propio=[0., -1., 0.])
 ret.resolver_sistema()
 f = ret.obtener_fuerzas()
 

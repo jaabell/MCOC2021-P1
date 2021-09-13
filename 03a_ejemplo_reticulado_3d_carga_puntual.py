@@ -22,9 +22,6 @@ ret.agregar_nodo(0    ,B,0)
 ret.agregar_nodo(L    ,B,0)
 ret.agregar_nodo(2*L  ,B,0)
 
-
-
-
 #Secciones de las barras
 circular_200_4 = Circular(200*mm_, 4*mm_, color="#3E701D")
 circular_200_8 = Circular(200*mm_, 8*mm_, color="#A3500B")
@@ -79,7 +76,7 @@ ver_reticulado_3d(ret,opciones_barras=opciones_barras)
 
 
 #Resolver el problema
-ret.ensamblar_sistema()
+ret.ensamblar_sistema(factor_peso_propio=[0.,0.,0.])
 ret.resolver_sistema()
 f = ret.obtener_fuerzas()
 
