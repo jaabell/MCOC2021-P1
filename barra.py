@@ -31,11 +31,6 @@ class Barra(object):
 
         #print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}")
 
-        return 0
-
-        xi = reticulado.xyz[ni,:]
-        xj = reticulado.xyz[nj,:]
-
         return np.linalg.norm(xj - xi)
 
     def calcular_area(self):
