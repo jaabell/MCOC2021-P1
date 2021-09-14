@@ -6,20 +6,21 @@ class Reticulado(object):
     __NNodosInit__ = 100
 
     #constructor
-    def __init__(self):
-        super(Reticulado, self).__init__()       
+    def __init__(self): 
+        super(Reticulado, self).__init__()
         
         #print("Constructor de Reticulado")
-
-        self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype = np.double)
-        self.Nnodos = 0	
+        
+        self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype=np.double)
+        self.Nnodos = 0
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
-        """Implementar"""
+        """Implementar"""	
+        
+        
 
     def agregar_nodo(self, x, y, z=0):
-        """Implementar"""	
 
         #print(f"Quiero agregar un nodo en ({x} {y} {z})")
         numero_de_nodo_actual = self.Nnodos
@@ -42,9 +43,7 @@ class Reticulado(object):
             return
         return self.xyz[n, :]
     	
-
     def calcular_peso_total(self):
-        """Implementar"""
         peso=0
         for b in self.barras:
             peso+=b.calcular_peso(self)	 
@@ -54,6 +53,7 @@ class Reticulado(object):
         
         return self.xyz
 
+      
     def obtener_barras(self):	
         
         return self.barras
@@ -71,7 +71,8 @@ class Reticulado(object):
         return 0
 
 
-    def ensamblar_sistema(self):
+
+    def ensamblar_sistema(self, factor_peso_propio=0.):
         """Implementar"""	
         
         return 0

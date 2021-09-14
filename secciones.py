@@ -1,64 +1,58 @@
-from numpy import pi, sqrt
-from constantes import g_, ρ_acero
+from numpy import pi, sqrt, nan
+from numpy.random import rand
+from constantes import g_, ρ_acero, mm_
  
 class Circular(object):
     """define una seccion Circular"""
 
-    def __init__(self, D, Dint):
+    def __init__(self, D, Dint, color=rand(3)):
         super(Circular, self).__init__()
-        """Implementar"""	
-        self.D = D        
+        self.D = D
         self.Dint = Dint
+        self.color = color  #color para la seccion
 
     def area(self):
-        """Implementar"""	
-        
         return pi*(self.D**2 - self.Dint**2)/4
 
     def peso(self):
-        """Implementar"""	
-        
-        return self.area()*ρ_acero*g
+        return self.area()*ρ_acero*g_
 
     def inercia_xx(self):
-        """Implementar"""	
-        
-        return pi*(self.D**4 - self.Dint**4)/4 
+        return pi*(self.D**4 - self.Dint**4)/4
 
     def inercia_yy(self):
-        """Implementar"""	
+        return self.inercia_xx()
+
+    def nombre(self):
+        return f"O{self.D*1e3:.0f}x{self.Dint*1e3:.0f}"
+
+    def __str__(self):
+        return f"Seccion Circular {self.nombre()}"
+
+
         
-        return self.inercia_xx() 
+#Mas adelante, no es para P1E1
 
-    def __str__(self):        
-        return f"Seccion Circular D = {self.D} Dint = {self.Dint}"
+class SeccionICHA(object):
+    """Lee la tabla ICHA y genera una seccion apropiada"""
 
-    class SeccionICHA(object):
-        """IMPLEMENTAR"""
-        def __init__(self, denominacion):
-            super(SeccionICHA, self).__init__()
-            """Implementar"""   
-            self.denominacion = denominacion        
+    def __init__(self, denominacion, base_datos="Perfiles ICHA.xlsx", debug=False, color=rand(3)):
+        super(SeccionICHA, self).__init__()
+        self.denominacion = denominacion
+        self.color = color  #color para la seccion
 
-        def area(self):
-            """Implementar"""   
-            
-            return 0
+        
+    def area(self):
+        return 0
 
-        def peso(self):
-            """Implementar"""   
-            
-            return 0
+    def peso(self):
+        return 0
 
-        def inercia_xx(self):
-            """Implementar"""   
-            
-            return 0
+    def inercia_xx(self):
+        return 0
 
-        def inercia_yy(self):
-            """Implementar"""   
-            
-            return 0
+    def inercia_yy(self):
+        return 0
 
-        def __str__(self):        
-            return f"Seccion ICHA D {self.denominacion}"
+    def __str__(self):
+        return f"Seccion ICHA {self.denominacion}"
