@@ -51,18 +51,58 @@ class SeccionICHA(object):
             if str(dfs.iloc[i,0]) != 'nan':
                 v = i
                 break
+
         pos_titulo_1 = v
-        pos_titulo_2 = v + 2
-        pos_titulo_3 = v + 4
-        dfs.columns = [dfs.loc[pos_titulo_2]]
+        pos_titulo_2 = pos_titulo_1 + 2
+        pos_titulo_3 = pos_titulo_2 + 4
+
+        if busc[0] == "H" or busc[0] == "PH":
+            dfs.columns = [dfs.loc[pos_titulo_2]]
         
-        self.row_fin = dfs.iloc[0,:]
-        for index, row in dfs.iterrows():
-            if (row['d'] == busc[1]) and (row['bf'] == busc[2]) and (row['peso'] == busc[3]):
-                self.row_fin = dfs.loc[index,:]
-        #print(self.row_fin)
+            self.row_fin = dfs.iloc[0,:]
+            for index, row in dfs.iterrows():
+                if (row['d'] == busc[1]) and (row['bf'] == busc[2]) and (row['peso'] == busc[3]):
+                    self.row_fin = dfs.loc[index,:]
+            #print(self.row_fin)
 
+        elif busc[0] == "HR":
+            dfs.iloc[pos_titulo_2, 3] = "peso (lbf/pie)"
+            dfs.columns = [dfs.loc[pos_titulo_2]]
+        
+            self.row_fin = dfs.iloc[0,:]
+            for index, row in dfs.iterrows():
+                if (row['d'] == busc[1]) and (row['bf'] == busc[2]) and (row['peso'] == busc[3]):
+                    self.row_fin = dfs.loc[index,:]
+            #print(self.row_fin)
 
+        elif busc[0] == "Cajon":
+            dfs.columns = [dfs.loc[pos_titulo_2]]
+        
+            self.row_fin = dfs.iloc[0,:]
+            for index, row in dfs.iterrows():
+                if (row['D'] == busc[1]) and (row['B'] == busc[2]) and (row['peso'] == busc[3]):
+                    self.row_fin = dfs.loc[index,:]
+            #print(self.row_fin)
+
+        elif busc[0] == "Circulares Mayores":
+            pos_titulo_2 -= 1
+            dfs.columns = [dfs.loc[pos_titulo_2]]
+
+            self.row_fin = dfs.iloc[0,:]
+            for index, row in dfs.iterrows():
+                if (row['D'] == busc[1]) and (row['Dint'] == busc[2]) and (row['t'] == busc[3]):
+                    self.row_fin = dfs.loc[index,:]
+            #print(self.row_fin)
+
+        elif busc[0] == "Circulares Menores":
+            pos_titulo_2 -= 1
+            dfs.columns = [dfs.loc[pos_titulo_2]]
+
+            self.row_fin = dfs.iloc[0,:]
+            for index, row in dfs.iterrows():
+                if (row['D'] == busc[1]) and (row['Dint'] == busc[2]) and (row['t'] == busc[3]):
+                    self.row_fin = dfs.loc[index,:]
+            #print(self.row_fin)
         
     def area(self):
         return self.row_fin['A']/(1e6)
@@ -71,10 +111,16 @@ class SeccionICHA(object):
         return self.row_fin['peso']
 
     def inercia_xx(self):
-        return self.row_fin['Ix/10⁶']
+        if 'Ix/10⁶' in self.row_fin:
+            return self.row_fin['Ix/10⁶']
+        else:
+            return self.row_fin['I/10⁶']
 
     def inercia_yy(self):
-        return self.row_fin['Iy/10⁶']
+        if 'Iy/10⁶' in self.row_fin:
+            return self.row_fin['Iy/10⁶']
+        else:
+            return self.row_fin['I/10⁶']
 
     def buscador(self):
         #Lista del tipo [HR, 1118, 405, 517,7]
@@ -94,14 +140,16 @@ class SeccionICHA(object):
 
 
     def __str__(self):
-        #if self.row_fin[]
+
         value = True
+
         for i in self.row_fin.values:
             if str(i) != 'nan':
                 value = True
                 break
             else:
                 value = False
+
         if value:
             s = f"{self.denominacion} encontrada. A={self.area()} Ix={self.inercia_xx()} Iy={self.inercia_yy()}\n"
         else:
