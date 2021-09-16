@@ -40,20 +40,26 @@ class Barra(object):
 
 
     def obtener_rigidez(self, ret):
-        """Implementar"""	
-        
-        return 0
+        """Implementar"""
+        cosθx=Lx/L
+        cosθy=Ly/L
+        cosθz=Lz/L
+        T= array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
+        ke=self.seccion.area()*E_acero/L * T.T @ T	
+        return ke
 
     def obtener_vector_de_cargas(self, ret):
         """Implementar"""	
         
-        return 0
+        return -W/2 *arrar([0,0,1,0,0,1])
+        #Si borro 1 de los ceros en cada trio, obtengo formato 2d
+
 
 
     def obtener_fuerza(self, ret):
         """Implementar"""	
-        
-        return 0
+        se=A*E_acero/L * T* u_e
+        return se
 
 
 

@@ -61,22 +61,60 @@ class Reticulado(object):
 
 
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
-        """Implementar"""	
+        #agrego restricción y consulto en el nodo
+        
+        if no_existe_restriccion_en_nodo:
+        
+            self.restricciones[nodo]
+        
+        self.restricciones[nodo].append(gdl, valor)
         
         return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
-        """Implementar"""	
+        if no_existe_fuerza_en_nodo:
+            self.carga[nodo]
+        
+        self.carga[nodo].append(gdl, valor)	
         
         return 0
 
 
-    def ensamblar_sistema(self):
-        """Implementar"""	
-        
+    def ensamblar_sistema(self, factor_peso_propio=0):
+        #Ensambar riguidez y vector de cargas
+        for e in self.barras: #aquí recorremos todas las barras
+        #ni, nj nodos i y j consultamos a las barras
+            ni=
+            nj=
+            ke=e.obtener_riguidez()
+            fe=e.obtener_vector_de_carga()
+            d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]	
+
+        #Método de riguidez directa
+        for i in range(6):
+            p=d[i]
+            for j in range(6):
+                q= d[j]
+                k[p,q]+=k_e[i,j]
+            f[p]+=f_e[i]
+
+        #Agregamos cargas puntuales
+
+        for node in cargas:
+            print(node)
+            Ncargas= len(cargas[node])
+            print(Ncargas)
+
+            for carga in cargas[node]:
+                gdl=carga[0]
+                f=carga[1]
+                print(f" Agregando carga de {f} en GDL {gdl}")
+
+                gdl_global=3*node +gdl
+
+                F[gdl_global]+= f
+
         return 0
-
-
 
     def resolver_sistema(self):
         """Implementar"""	
