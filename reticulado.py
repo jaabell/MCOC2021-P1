@@ -6,20 +6,21 @@ class Reticulado(object):
     __NNodosInit__ = 100
 
     #constructor
-    def __init__(self):
-        super(Reticulado, self).__init__()       
+    def __init__(self): 
+        super(Reticulado, self).__init__()
         
         #print("Constructor de Reticulado")
-
-        self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype = np.double)
-        self.Nnodos = 0	
+        
+        self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype=np.double)
+        self.Nnodos = 0
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
-        """Implementar"""
+        """Implementar"""	
+        
+        
 
     def agregar_nodo(self, x, y, z=0):
-        """Implementar"""	
 
         #print(f"Quiero agregar un nodo en ({x} {y} {z})")
         numero_de_nodo_actual = self.Nnodos
@@ -42,9 +43,7 @@ class Reticulado(object):
             return
         return self.xyz[n, :]
     	
-
     def calcular_peso_total(self):
-        """Implementar"""
         peso=0
         for b in self.barras:
             peso+=b.calcular_peso(self)	 
@@ -54,6 +53,7 @@ class Reticulado(object):
         
         return self.xyz
 
+      
     def obtener_barras(self):	
         
         return self.barras
@@ -80,12 +80,13 @@ class Reticulado(object):
         return 0
 
 
+
     def ensamblar_sistema(self, factor_peso_propio=0):
         #Ensambar riguidez y vector de cargas
         for e in self.barras: #aquí recorremos todas las barras
         #ni, nj nodos i y j consultamos a las barras
-            ni=
-            nj=
+            ni= e.ni
+            nj= e.nj
             ke=e.obtener_riguidez()
             fe=e.obtener_vector_de_carga()
             d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]	
@@ -104,16 +105,6 @@ class Reticulado(object):
             print(node)
             Ncargas= len(cargas[node])
             print(Ncargas)
-
-            for carga in cargas[node]:
-                gdl=carga[0]
-                f=carga[1]
-                print(f" Agregando carga de {f} en GDL {gdl}")
-
-                gdl_global=3*node +gdl
-
-                F[gdl_global]+= f
-
         return 0
 
     def resolver_sistema(self):

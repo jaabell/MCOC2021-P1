@@ -5,6 +5,8 @@ Optimización estructural de un puente reticular
 
 Para esta entrega se modificó barras.py y reticulado.py para llegar al mismo resultado propuesto.
 
+# Entrega 2 - Creación de secciones ICHA  
+
 
 
 
