@@ -56,17 +56,9 @@ class SeccionICHA(object):
         pos_titulo_2 = pos_titulo_1 + 2
         pos_titulo_3 = pos_titulo_2 + 4
 
-        if busc[0] == "H" or busc[0] == "PH":
-            dfs.columns = [dfs.loc[pos_titulo_2]]
-        
-            self.row_fin = dfs.iloc[0,:]
-            for index, row in dfs.iterrows():
-                if (row['d'] == busc[1]) and (row['bf'] == busc[2]) and (row['peso'] == busc[3]):
-                    self.row_fin = dfs.loc[index,:]
-            #print(self.row_fin)
-
-        elif busc[0] == "HR":
-            dfs.iloc[pos_titulo_2, 3] = "peso (lbf/pie)"
+        if busc[0] == "H" or busc[0] == "PH" or busc[0] == "HR":
+            if busc[0] == "HR":
+                dfs.iloc[pos_titulo_2, 3] = "peso (lbf/pie)"
             dfs.columns = [dfs.loc[pos_titulo_2]]
         
             self.row_fin = dfs.iloc[0,:]
@@ -78,31 +70,22 @@ class SeccionICHA(object):
         elif busc[0] == "Cajon":
             dfs.columns = [dfs.loc[pos_titulo_2]]
         
-            self.row_fin = dfs.iloc[0,:]
+            self.row_fin = dfs.iloc[1,:]
             for index, row in dfs.iterrows():
                 if (row['D'] == busc[1]) and (row['B'] == busc[2]) and (row['peso'] == busc[3]):
                     self.row_fin = dfs.loc[index,:]
             #print(self.row_fin)
 
-        elif busc[0] == "Circulares Mayores":
+        elif busc[0] == "Circulares Mayores" or busc[0] == "Circulares Menores":
             pos_titulo_2 -= 1
             dfs.columns = [dfs.loc[pos_titulo_2]]
 
-            self.row_fin = dfs.iloc[0,:]
+            self.row_fin = dfs.iloc[1,:]
             for index, row in dfs.iterrows():
-                if (row['D'] == busc[1]) and (row['Dint'] == busc[2]) and (row['t'] == busc[3]):
+                if (row['D'] == busc[1]) and (row['Dint'] == busc[2]):
                     self.row_fin = dfs.loc[index,:]
             #print(self.row_fin)
 
-        elif busc[0] == "Circulares Menores":
-            pos_titulo_2 -= 1
-            dfs.columns = [dfs.loc[pos_titulo_2]]
-
-            self.row_fin = dfs.iloc[0,:]
-            for index, row in dfs.iterrows():
-                if (row['D'] == busc[1]) and (row['Dint'] == busc[2]) and (row['t'] == busc[3]):
-                    self.row_fin = dfs.loc[index,:]
-            #print(self.row_fin)
         
     def area(self):
         return self.row_fin['A']/(1e6)
@@ -135,6 +118,13 @@ class SeccionICHA(object):
         deno2 = deno[1].split('x')
         for i in deno2:
             den.append(float(i))
+
+        if den[0] == "[]":
+            den[0] = "Cajon"
+        if den[0] == "O":
+            den[0] = "Circulares Mayores"
+        if den[0] == "o":
+            den[0] = "Circulares Menores"
 
         return den
 
