@@ -60,21 +60,46 @@ class Reticulado(object):
 
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
         
-        """Implementar"""	
-        
+        if nodo in self.restricciones:
+            self.restricciones[nodo].append([gdl,valor])
+        else:
+            self.restricciones[nodo] = [[gdl,valor]]
+            
         return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
         
-        """Implementar"""	
+        if nodo in self.cargas:
+            self.cargas[nodo].append([gdl,valor])
+        else:
+            self.cargas[nodo] = [[gdl,valor]]	
         
         return 0
 
 
     def ensamblar_sistema(self, factor_peso_propio=0.):
-        
-        """Implementar"""	
-        
+        n = self.Nnodos*3 + 2
+        K = np.zeros((n,n)); f = np.zeros(n) #nodo [-1]+2 (dimension de K y f)
+                     
+        for e in self.barras:
+            d = [3*e.ni, 3*e.ni + 1, 3*e.ni + 2, 3*e.nj, 3*e.nj +1, 3*e.nj +2]
+            ke = e.obtener_rigidez(self)
+            fe = e.obtener_vector_de_cargas(self)
+            for i in range (6):
+                p = d[i]
+                for j in range (6):
+                    q = d[j]
+                    K[p,q]+=ke[i,j]
+                f[p] += fe[i]
+                
+                
+                
+                
+                
+        for node in self.cargas:
+            for carga in self.cargas[node]:
+                gdl = carga[0]
+                f = carga[1]
         return 0
 
 
