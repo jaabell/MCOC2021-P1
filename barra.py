@@ -29,44 +29,51 @@ class Barra(object):
         xi = reticulado.xyz[ni,:]
         xj = reticulado.xyz[nj,:]
 
-        print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}")
+        #print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}") ??
 
-        return 0
+        largo = np.linalg.norm(xi-xj)
+ 
+        return largo
 
     def calcular_peso(self, reticulado):
         """Devuelve el largo de la barra. 
         xi : Arreglo numpy de dimenson (3,) con coordenadas del nodo i
         xj : Arreglo numpy de dimenson (3,) con coordenadas del nodo j
         """
+        masa = self.calcular_largo(reticulado)*self.seccion.area()*ρ_acero
+        gravedad = g_
+        peso = masa*gravedad
         
-        """Implementar"""	
+        return peso
+    
+    def calcular_area(self, reticulado):
+        """Devuelve el area de la barra.""" 
         
-        return 0
-
-
-
-
+        area = self.seccion.area()
+        
+        return area
+    
     def obtener_rigidez(self, ret):
         
-        """Implementar"""	
+        cosθx = Lx/L
+        cosθy = Ly/L
+        cosθz = Lz/L 
         
-        return 0
+        ke =  self.seccion.area()*E_acero/L * T.T @ T
+
+        return ke
 
     def obtener_vector_de_cargas(self, ret):
         
         """Implementar"""	
         
-        return 0
-
+        return -W/2*array([0,1,0,1])
 
     def obtener_fuerza(self, ret):
         
-        """Implementar"""	
+        se = A*E_acero/L*T*u_e
         
-        return 0
-
-
-
+        return se
 
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
         
@@ -74,16 +81,11 @@ class Barra(object):
         
         return 0
 
-
-
-
-
     def obtener_factor_utilizacion(self, Fu, ϕ=0.9):
         
         """Implementar"""	
         
         return 0
-
 
     def rediseñar(self, Fu, ret, ϕ=0.9):
         
