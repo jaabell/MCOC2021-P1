@@ -52,8 +52,8 @@ class Barra(object):
         cosθx=Lx/L
         cosθy=Ly/L
         cosθz=Lz/L
-        T= np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
-        ke=self.seccion.area()*E_acero/L * T.T @ T	
+        T= np.array([[-cosθx], [-cosθy], [-cosθz], [cosθx], [cosθy], [cosθz]])
+        ke=(self.seccion.area()*E_acero/L) * T.T * T
         return ke
 
     def obtener_vector_de_cargas(self, reticulado):

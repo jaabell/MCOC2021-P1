@@ -115,53 +115,47 @@ class Reticulado(object):
         return 0
 
     def resolver_sistema(self):
-        #Cómo particionamos una matriz?
-        
-        km1=inv(self.k)
 
-        #F DEBE SER DEL TAMAÑO DE LOS GRADOS DE LIBERTAD DEL SISTEMA
-        F=np.zeros(5)
-        F[1]=f
-        #ARMAMOS GDL FIJOS SEGÚN DICCIONARIOS DE RESTRICCIONES
-        #LUEGO, USANDO np.setdiff1d  obtenemos los gld_libres
-        gdl_libres=[]
+        contador = 0
+        for i in self.restricciones:
+            contador += self.restricciones[i][0]
+
+        gdl_libres = np.arange(contador)          #cant grados de libertad del sistema
         gdl_fijos=[]
 
-        kff= k[np.ix_(gdl_libres, gdl_libres)]
-        kcc= k[np.ix_(gdl_fijos, gdl_fijos)]
-        kff= k[np.ix_(gdl_fijos, gdl_libres)]
-        kff= k[np.ix_(gdl_libres, gdl_fijos)]
-        print(f"k={k}")
-        print(f"kff={kff}")
-        print(f"kcc={kcc}")
-        print(f"kcf={kcf}")
-        print(f"kfc={kfc}")
+        #Vemos las restricciones, gdl y valores
+        for i in self.restricciones:
+            gdl = self.restricciones[i][0]
+            valor = self.restricciones[i][1]
+            gdl_global = gdl + i*3
+            self.υ[gdl_global] += valor
+            gdl_fijos.append(gdl_global)
 
-        #U DEBE SER DEL TAMAÑO DE LOS GRADOS DE LIBERTAD DEL SISTEMA (MODIFICAR EL 5)
-        # Si es que hay restricciones distintas de 0, se deben agregar en u
+        np.array(gdl_fijos)
+        gdl_libres = np.setdiff1d(gdl_libres, gdl_fijos)
 
-        u=np.zeros(5)
-        uc=u[gld_fijos]
-        Ff=F[gdl_libres]- Kfc @ uc
+        #Ahora con las cargas aplicadas al sistema (al igual como lo hicimos con ensamblar sistema)
+        for n in self.cargas:
+            gdl = self.cargas[i][0]
+            valor = self.cargas[i][1]
+            gdl_global = gdl + n*3
+            self.f[gdl_global] += valor
 
-        u[gdl_libres]= lin.solve(kff,Ff)
-        R= Kcf @  u[gdl_libres] + Kcc @ uc - F[gdl_fijos]
+        kff= self.k[np.ix_(gdl_libres, gdl_libres)]
+        kcc= self.k[np.ix_(gdl_fijos, gdl_fijos)]
+        kcf= self.k[np.ix_(gdl_fijos, gdl_libres)]
+        kfc= self.k[np.ix_(gdl_libres, gdl_fijos)]
+
+        uf = self.υ[gdl_libres]
+        uc = self.υ[gdl_fijos]
+
+
+        ff = self.f[gdl_libres]
+        fc = self.f[gdl_fijos]
+
+        r = solve(kff, ff-kfc*uc)
         
-        print(f"u={u}")
-        print(f"R={R}")
-        self.kff
-        self.Fc
-        self.Kcc
-        self.Kff
-        self.Kfc
-        self.kcf
-        self.u
-        self.uf
-        self.uc
-        self.R
-
-        """Implementar"""
-
+        self.υ[gdl_libres] = r
         
         return 0
 
