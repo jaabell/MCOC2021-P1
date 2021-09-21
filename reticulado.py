@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.linalg import solve
+import scipy.linalg as lin
 
 class Reticulado(object):
     """Define un reticulado"""
@@ -105,10 +106,71 @@ class Reticulado(object):
             print(node)
             Ncargas= len(cargas[node])
             print(Ncargas)
+        self.k
+        self.υ
+        self.F
         return 0
 
     def resolver_sistema(self):
-        """Implementar"""	
+        #Cómo particionamos una matriz?
+        
+        km1=lin.inv(k)
+
+        #F DEBE SER DEL TAMAÑO DE LOS GRADOS DE LIBERTAD DEL SISTEMA
+        F=np.zeros(5)
+        F[1]=f
+        #ARMAMOS GDL FIJOS SEGÚN DICCIONARIOS DE RESTRICCIONES
+        #LUEGO, USANDO np.setdiff1d  obtenemos los gld_libres
+        gdl_libres=[]
+        gdl_fijos=[]
+
+        kff= k[np.ix_(gdl_libres, gdl_libres)]
+        kcc= k[np.ix_(gdl_fijos, gdl_fijos)]
+        kff= k[np.ix_(gdl_fijos, gdl_libres)]
+        kff= k[np.ix_(gdl_libres, gdl_fijos)]
+        print(f"k={k}")
+        print(f"kff={kff}")
+        print(f"kcc={kcc}")
+        print(f"kcf={kcf}")
+        print(f"kfc={kfc}")
+
+        #U DEBE SER DEL TAMAÑO DE LOS GRADOS DE LIBERTAD DEL SISTEMA (MODIFICAR EL 5)
+        # Si es que hay restricciones distintas de 0, se deben agregar en u
+
+        u=np.zeros(5)
+        uc=u[gld_fijos]
+        Ff=F[gdl_libres]- Kfc @ uc
+
+        u[gdl_libres]= lin.solve(kff,Ff)
+        R= Kcf @  u[gdl_libres] + Kcc @ uc - F[gdl_fijos]
+        
+        print(f"u={u}")
+        print(f"R={R}")
+        self.kff
+        self.Fc
+        self.Kcc
+        self.Kff
+        self.Kfc
+        self.kcf
+        self.u
+        self.uf
+        self.uc
+        self.R
+
+
+
+
+
+
+
+
+
+
+
+
+
+        """Implementar"""
+
         
         return 0
 
