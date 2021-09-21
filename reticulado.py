@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.linalg import solve
+from scipy.linalg import solve, inv
 import scipy.linalg as lin
 
 class Reticulado(object):
@@ -17,8 +17,7 @@ class Reticulado(object):
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
-        """Implementar"""	
-        
+        """Implementar"""
         
 
     def agregar_nodo(self, x, y, z=0):
@@ -96,31 +95,29 @@ class Reticulado(object):
         #ni, nj nodos i y j consultamos a las barras
             ni= e.ni
             nj= e.nj
-            k_e=e.obtener_rigidez(self)
+            ke=e.obtener_rigidez(self)
             fe=e.obtener_vector_de_cargas(self)
             d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]	
 
-        #Método de riguidez directa
-        for i in range(6):
-            p=d[i]
-            for j in range(6):
-                q= d[j]
-                k[p,q]+=k_e[i,j]
-            f[p]+=f_e[i]
+            #Método de riguidez directa
+            for i in range(6):
+                p = d[i]
+                for j in range(6):
+                    q = d[j]
+                    self.k[p,q]+=ke[i,j]
+                self.f[p]+=fe[i]
 
         #Agregamos cargas puntuales
 
-        for node in cargas:
-            print(node)
-            Ncargas= len(cargas[node])
-            print(Ncargas)
+        for n in self.cargas:
+            self.f[n*3 + self.cargas[n][0]] += self.cargas[n][1]
        
         return 0
 
     def resolver_sistema(self):
         #Cómo particionamos una matriz?
         
-        km1=lin.inv(k)
+        km1=inv(self.k)
 
         #F DEBE SER DEL TAMAÑO DE LOS GRADOS DE LIBERTAD DEL SISTEMA
         F=np.zeros(5)
@@ -162,18 +159,6 @@ class Reticulado(object):
         self.uf
         self.uc
         self.R
-
-
-
-
-
-
-
-
-
-
-
-
 
         """Implementar"""
 

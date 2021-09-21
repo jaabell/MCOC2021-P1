@@ -45,9 +45,9 @@ class Barra(object):
         L= self.calcular_largo(reticulado)
         ni=reticulado.obtener_coordenada_nodal(self.ni)
         nj=reticulado.obtener_coordenada_nodal(self.nj)
-        Lx=(nj[0]-ni[0])
-        Ly=(nj[1]-ni[1])
-        Lz=(nj[2]-ni[2])
+        Lx=abs(nj[0]-ni[0])
+        Ly=abs(nj[1]-ni[1])
+        Lz=abs(nj[2]-ni[2])
     
         cosθx=Lx/L
         cosθy=Ly/L
