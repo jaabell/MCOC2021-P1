@@ -16,7 +16,9 @@ class Reticulado(object):
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
-        	
+        self.K = None
+        self.f = None
+        self.u = None
         
 
 
@@ -79,27 +81,37 @@ class Reticulado(object):
 
     def ensamblar_sistema(self, factor_peso_propio=0.):
         n = self.Nnodos*3 + 2
-        K = np.zeros((n,n)); f = np.zeros(n) #nodo [-1]+2 (dimension de K y f)
-                     
+        self.K = np.zeros((n,n)) 
+        self.f = np.zeros(n) #nodo [-1]+2 (dimension de K y f)
+        self.u = np.zeros(n)
+        
+        
         for e in self.barras:
+            
             d = [3*e.ni, 3*e.ni + 1, 3*e.ni + 2, 3*e.nj, 3*e.nj +1, 3*e.nj +2]
             ke = e.obtener_rigidez(self)
             fe = e.obtener_vector_de_cargas(self)
+            
             for i in range (6):
                 p = d[i]
                 for j in range (6):
                     q = d[j]
-                    K[p,q]+=ke[i,j]
-                f[p] += fe[i]
-                
-                
+                    self.K[p,q]+=ke[i,j]
+                    
+                if factor_peso_propio != 0.:
+                    self.f[p] += fe[i]
+            
                 
                 
                 
         for node in self.cargas:
-            for carga in self.cargas[node]:
-                gdl = carga[0]
-                f = carga[1]
+            for puntual in self.cargas[node]:
+                gdl = puntual[0]
+                valor = puntual[1]
+                self.f[node*3 + gdl] = valor
+                
+                
+                
         return 0
 
 
