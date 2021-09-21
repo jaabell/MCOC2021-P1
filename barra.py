@@ -1,5 +1,4 @@
 import numpy as np
-
 from constantes import g_, ρ_acero, E_acero
 
 
@@ -41,24 +40,31 @@ class Barra(object):
         return ((self.calcular_area())*(self.calcular_largo(reticulado))*(ρ_acero)*(g_))
 
 
-    def obtener_rigidez(self, ret):
-        """Implementar"""
+    def obtener_rigidez(self, reticulado):
+
+        L= self.calcular_largo(reticulado)
+        ni=reticulado.obtener_coordenada_nodal(self.ni)
+        nj=reticulado.obtener_coordenada_nodal(self.nj)
+        Lx=(nj[0]-ni[0])
+        Ly=(nj[1]-ni[1])
+        Lz=(nj[2]-ni[2])
+    
         cosθx=Lx/L
         cosθy=Ly/L
         cosθz=Lz/L
-        T= array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
+        T= np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
         ke=self.seccion.area()*E_acero/L * T.T @ T	
         return ke
 
-    def obtener_vector_de_cargas(self, ret):
+    def obtener_vector_de_cargas(self, reticulado):
         """Implementar"""	
-        
-        return -W/2 *arrar([0,0,1,0,0,1])
+        W = self.calcular_peso(reticulado)
+        return -W/2 *np.array([0,0,1,0,0,1])
         #Si borro 1 de los ceros en cada trio, obtengo formato 2d
 
 
 
-    def obtener_fuerza(self, ret):
+    def obtener_fuerza(self, reticulado):
         """Implementar"""	
         se=A*E_acero/L * T* u_e
         return se
@@ -70,10 +76,6 @@ class Barra(object):
         """Implementar"""	
         
         return 0
-
-
-
-
 
     def obtener_factor_utilizacion(self, Fu, ϕ=0.9):
         """Implementar"""	

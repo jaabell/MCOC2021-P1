@@ -64,19 +64,22 @@ class Reticulado(object):
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
         #agrego restricción y consulto en el nodo
         
-        if no_existe_restriccion_en_nodo:
+        if nodo in self.restricciones: 
         
             self.restricciones[nodo]
-        
-        self.restricciones[nodo].append(gdl, valor)
+
+        else:
+            self.restricciones[nodo]=(gdl, valor)
         
         return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
-        if no_existe_fuerza_en_nodo:
-            self.carga[nodo]
+        if nodo in self.cargas:
+
+            self.cargas[nodo]
         
-        self.carga[nodo].append(gdl, valor)	
+        else:
+            self.cargas[nodo]=(gdl, valor)	
         
         return 0
 
@@ -84,12 +87,17 @@ class Reticulado(object):
 
     def ensamblar_sistema(self, factor_peso_propio=0):
         #Ensambar riguidez y vector de cargas
+        n=self.Nnodos*3 + 2
+        self.k= np.zeros((n,n))
+        self.υ=np.zeros(n)
+        self.f=np.zeros(n)
+        
         for e in self.barras: #aquí recorremos todas las barras
         #ni, nj nodos i y j consultamos a las barras
             ni= e.ni
             nj= e.nj
-            ke=e.obtener_riguidez()
-            fe=e.obtener_vector_de_carga()
+            k_e=e.obtener_rigidez(self)
+            fe=e.obtener_vector_de_cargas(self)
             d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]	
 
         #Método de riguidez directa
@@ -106,9 +114,7 @@ class Reticulado(object):
             print(node)
             Ncargas= len(cargas[node])
             print(Ncargas)
-        self.k
-        self.υ
-        self.F
+       
         return 0
 
     def resolver_sistema(self):

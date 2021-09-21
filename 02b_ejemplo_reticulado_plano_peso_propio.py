@@ -7,6 +7,7 @@ from secciones import Circular
 
 L = 2.*m_
 
+
 #Inicializar modelo
 ret = Reticulado()
 
