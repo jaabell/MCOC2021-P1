@@ -16,6 +16,9 @@ class Reticulado(object):
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
+        self.K = None
+        self.F = None
+        self.u = None
         
         self.Kcc = None
         self.Kff = None
