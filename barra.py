@@ -1,5 +1,4 @@
 import numpy as np
-
 from constantes import g_, ρ_acero, E_acero
 
 
@@ -17,55 +16,110 @@ class Barra(object):
     def obtener_conectividad(self):
         return [self.ni, self.nj]
 
+
     def calcular_largo(self, reticulado):
         """Devuelve el largo de la barra. 
-        xi : Arreglo numpy de dimenson (3,) con coordenadas del nodo i
-        xj : Arreglo numpy de dimenson (3,) con coordenadas del nodo j
+        xi : Arreglo numpy de dimension (3,) con coordenadas del nodo i
+        xj : Arreglo numpy de dimension (3,) con coordenadas del nodo j
         """
         
         ni = self.ni
         nj = self.nj
 
-        xi = reticulado.xyz[ni,:]
-        xj = reticulado.xyz[nj,:]
+        xi = reticulado.xyz[ni,:] # [xi,yi]
+        xj = reticulado.xyz[nj,:] # [xj,yj]
+            
+        largo = np.sqrt(np.sum((xi - xj)**2))
+        
+        #print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}")
 
-        print(f"Barra {ni} a {nj} xi = {xi} xj = {xj}")
+        return largo
+    
+    
+    def calcular_area(self):
+        """Devuelve el area de la barra. """
+        
+        seccion = self.seccion
+        area = seccion.area()
+    
+        return area
 
-        return 0
 
     def calcular_peso(self, reticulado):
+        """Devuelve el peso de la barra"""
+        
+        seccion = self.seccion
+        peso = seccion.peso()
+        largo = self.calcular_largo(reticulado)
+        
+        return peso*largo
+
+
+#Se creo la función obtener la matriz de transformacion para evitar la repeteticion de codigo continuamente
+    def obtener_T(self,ret):
+        
+        """Implementar"""
+        
         """Devuelve el largo de la barra. 
-        xi : Arreglo numpy de dimenson (3,) con coordenadas del nodo i
-        xj : Arreglo numpy de dimenson (3,) con coordenadas del nodo j
+        xi : Arreglo numpy de dimension (3,) con coordenadas del nodo i
+        xj : Arreglo numpy de dimension (3,) con coordenadas del nodo j
         """
         
-        """Implementar"""	
+        ni = self.ni
+        nj = self.nj
+
+        xi = ret.xyz[ni,:] # [xi,yi]
+        xj = ret.xyz[nj,:] # [xj,yj]
+            
+        L = self.calcular_largo(ret)
         
-        return 0
-
-
+       # cosx = ()/largo
+        cos_theta_neg_x = (xi[0]-xj[0])/L
+        cos_theta_neg_y = (xi[1]-xj[1])/L
+        cos_theta_neg_z = (xi[2]-xj[2])/L
+        #T = array([-cos(θ)x, -cos(θ)y, -cos(θ)z, cos(θ)x, cos(θ)y, cos(θ)z])
+        T = np.array([[cos_theta_neg_x,cos_theta_neg_y,cos_theta_neg_z,-cos_theta_neg_x,-cos_theta_neg_y,-cos_theta_neg_z]])
+        
+        return T
 
 
     def obtener_rigidez(self, ret):
         
-        """Implementar"""	
+        """Implementar"""
         
-        return 0
+        
+        T = self.obtener_T(ret)
+        L = self.calcular_largo(ret)
+        
+        ke = (self.seccion.area()*E_acero/L) * T.T @ T
+        
+        return ke #definir cosenos en funcion de los nodos y el largo 
+    
 
     def obtener_vector_de_cargas(self, ret):
         
-        """Implementar"""	
-        
-        return 0
+        """Implementar"""
+        W = self.calcular_peso(ret)      
+        return -W/2*np.array([0,0,1,0,0,1]) #definir W
 
 
     def obtener_fuerza(self, ret):
         
-        """Implementar"""	
+        """Implementar"""
         
-        return 0
-
-
+        ni = self.ni
+        nj = self.nj
+        
+        A = self.calcular_area()
+        L = self.calcular_largo(ret)
+        T = self.obtener_T(ret)
+        
+        #u = del reticulado - resolver sistema 
+        
+        #u_e = np.array([u[2*ni], u[2*ni+1], u[2*nj], u[2*nj+1]])
+        #se = A*E_acero/L * T * u_e
+        
+        #return se
 
 
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
@@ -73,9 +127,6 @@ class Barra(object):
         """Implementar"""	
         
         return 0
-
-
-
 
 
     def obtener_factor_utilizacion(self, Fu, ϕ=0.9):
