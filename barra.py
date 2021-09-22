@@ -55,9 +55,9 @@ class Barra(object):
         ke=(self.seccion.area()*E_acero/L) * T * T.T
         return ke
 
-    def obtener_vector_de_cargas(self, reticulado):
+    def obtener_vector_de_cargas(self, reticulado, factor_modificado):
         W = self.calcular_peso(reticulado)
-        return -W/2 *np.array([0,0,1,0,0,1])
+        return -W/2 *np.array(factor_modificado)
         #Si borro 1 de los ceros en cada trio, obtengo formato 2d
 
     def obtener_fuerza(self, reticulado):

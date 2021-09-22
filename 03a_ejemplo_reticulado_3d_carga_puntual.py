@@ -77,6 +77,9 @@ ver_reticulado_3d(ret,opciones_barras=opciones_barras)
 
 #Resolver el problema
 ret.ensamblar_sistema(factor_peso_propio=[0.,0.,0.])
+
+
+
 ret.resolver_sistema()
 f = ret.obtener_fuerzas()
 

@@ -85,19 +85,26 @@ class Reticulado(object):
 
 
 
-    def ensamblar_sistema(self, factor_peso_propio=0):
+    def ensamblar_sistema(self, factor_peso_propio):
         #Ensambar riguidez y vector de cargas
         n=self.Nnodos*3
         self.k= np.zeros((n,n))
         self.u=np.zeros(n)
         self.f=np.zeros(n)
+        factor_modificado=[]
         
+        for p in range(2):
+            for i in factor_peso_propio:
+                factor_modificado.append(i)
+
         for e in self.barras: #aquí recorremos todas las barras
         #ni, nj nodos i y j consultamos a las barras
             ni= e.ni
             nj= e.nj
             ke=e.obtener_rigidez(self)
-            fe=e.obtener_vector_de_cargas(self)
+
+            fe=e.obtener_vector_de_cargas(self,factor_modificado)
+            print(factor_peso_propio,factor_peso_propio)
             d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]
 
             #Método de riguidez directa
@@ -127,7 +134,7 @@ class Reticulado(object):
         return 0
 
     def resolver_sistema(self):
-
+        print(f"vector f= {self.f}")
         gdl_libres = np.arange(self.Nnodos*3)          #cant grados de libertad del sistema
         gdl_fijos=[]
 
@@ -161,6 +168,9 @@ class Reticulado(object):
 
         ff = self.f[gdl_libres]
         fc = self.f[gdl_fijos]
+        print(f"vector ff = {ff}")
+        print(f" Gdl libres= {gdl_libres}")
+        print(f" Gdl fijos= {gdl_fijos}")
 
         r = solve(kff, ff-kfc@uc)
         
