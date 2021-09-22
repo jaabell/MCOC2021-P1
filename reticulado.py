@@ -106,14 +106,24 @@ class Reticulado(object):
                 for j in range(6):
                     q = d[j]
                     self.k[p,q]+=ke[i,j]
-                self.f[p] = fe[i]
+                self.f[p] += fe[i]
 
         #print(f"k = {self.k}")
         #Agregamos cargas puntuales
+        #print(self.cargas)
 
-        #for n in self.cargas:
-        #    self.f[n*3 + self.cargas[n][0]] += self.cargas[n][1]
-        #print(f"f 2 = {self.f}")
+        #for node in self.cargas:
+            #print (self.cargas[node])
+            #Ncargas=len(self.cargas[node])
+            #print(Ncargas)
+            #for carga in self.cargas[node]:
+                #gdl=carga[0]
+                #f=carga[1]
+                #print(f"Agregando carga de {f} en GDL {gdl} ")
+                #gld_global=3*node+gdl
+                #print(f"f vale {f}")
+                #F[gld_global]+=f
+                #Vector de cargas externas??
         return 0
 
     def resolver_sistema(self):
@@ -192,6 +202,7 @@ class Reticulado(object):
 
     def __str__(self):
 
+        #Nodos
         s = "nodos: \n"
 
         for i in range(len(self.xyz[0: self.Nnodos,:])):
@@ -202,10 +213,57 @@ class Reticulado(object):
         s += "\n"
         s += "\n"
 
+        #Barras
         s+= "barras: \n"
 
         for i in range(len(self.barras)):
             s += "  " + str(i) + ": " + "[ " + str(self.barras[i].ni) + " " + str(self.barras[i].nj) + " ]"
+            s += "\n"
+        
+        #Restricciones
+        s += "\n"
+        s+="restricciones: \n"
+
+        for clave in self.restricciones:
+            s += "  " + str(clave) + ": " + str(self.restricciones[clave]) + " " 
+            s += "\n"
+        s+="\n"
+
+        #Cargas 
+        #print(self.cargas)
+        s+="Cargas: \n"
+        for i in (self.cargas):
+            s += "  " + str(i) + ": " + str(self.cargas[i]) + " " 
+            s += "\n"             
+        s+="\n"
+        
+        #Desplazamientos
+        s+= "Desplazamientos: \n"
+        lk=0
+        Agrup=[]
+        for i in range(len(self.u)):
+            if lk>=(len(self.u)):
+                break
+            else:
+                des=[]
+                for l in range(3):
+                    des.append(self.u[lk])
+                    lk+=1
+            Agrup.append(des) 
+       
+        for p in range(len(Agrup)):
+             s += "  " + str(p) + ": " + "( " + str(Agrup[p][0])+", "+ str(Agrup[p][1])+", "+ str(Agrup[p][2]) + " )" 
+             s+="\n"
+
+                
+        s+= "\n" 
+    
+    
+        #Fuerzas
+        s += "\n"
+        s+="Fuerzas: \n"
+        for i in range((len(self.fuerzas))):
+            s += "  " + str(i) + ": " + str(self.fuerzas[i]) + " " 
             s += "\n"
 
         return s
