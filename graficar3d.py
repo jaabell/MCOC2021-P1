@@ -57,7 +57,7 @@ def graficar_nodos(ret, fig, opciones):
 
     # plt.figure(fig)
     # Nodos
-    xyz = ret.obtener_nodos()
+    xyz = ret.obtener_nodos().copy()
 
     if opciones["usar_posicion_deformada"]: 
         if opciones["datos_desplazamientos_nodales"] is None:
@@ -90,7 +90,7 @@ def graficar_barras(ret, fig, opciones):
         if key not in opciones:
             opciones[key] = opc_barras_default[key]
 
-    xyz = ret.obtener_nodos()[:,0:3]
+    xyz = ret.obtener_nodos()[:,0:3].copy()
 
     if opciones["usar_posicion_deformada"]: 
         if opciones["datos_desplazamientos_nodales"] is None:
