@@ -5,29 +5,30 @@ import pandas as pd
 import string
  
 class Circular(object):
-     """define una seccion Circular"""
-    def __init__(self, D, Dint, color=rand(3)):
+      """define una seccion Circular"""
+      
+      def __init__(self, D, Dint, color=rand(3)):
         super(Circular, self).__init__()
         self.D = D
         self.Dint = Dint
-        self.color = color  #color para la seccion
+        self.color = color  #color para la seccion      
 
-    def area(self):
+      def area(self):
         return pi*(self.D**2 - self.Dint**2)/4
 
-    def peso(self):
+      def peso(self):
         return self.area()*ρ_acero*g_
 
-    def inercia_xx(self):
+      def inercia_xx(self):
         return pi*(self.D**4 - self.Dint**4)/4
 
-    def inercia_yy(self):
+      def inercia_yy(self):
         return self.inercia_xx()
 
-    def nombre(self):
+      def nombre(self):
         return f"O{self.D*1e3:.0f}x{self.Dint*1e3:.0f}"
 
-    def __str__(self):
+      def __str__(self):
         return f"Seccion Circular {self.nombre()}"
 
 
