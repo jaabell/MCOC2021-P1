@@ -114,12 +114,12 @@ class Barra(object):
         L = self.calcular_largo(ret)
         T = self.obtener_T(ret)
         
-        #u = del reticulado - resolver sistema 
+        u = ret.u
         
-        #u_e = np.array([u[2*ni], u[2*ni+1], u[2*nj], u[2*nj+1]])
-        #se = A*E_acero/L * T * u_e
+        u_e = np.array([u[2*ni], u[2*ni+1], u[2*ni+2], u[2*nj], u[2*nj+1], u[2*nj+2]])
+        se = A*E_acero/L * T * u_e
         
-        #return se
+        return se
 
 
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
