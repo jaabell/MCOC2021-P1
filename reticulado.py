@@ -20,6 +20,17 @@ class Reticulado(object):
         self.f = None
         self.u = None
         
+        self.Kcc = None
+        self.Kff = None
+        self.Kcf = None
+        self.Kfc = None
+        
+        self.uc = None
+        self.uf = None
+        
+        self.Ff = None
+        self.Fc = None
+        self.R = None
 
 
     def agregar_nodo(self, x, y, z=0):
@@ -118,7 +129,32 @@ class Reticulado(object):
 
     def resolver_sistema(self):
         
-        """Implementar"""	
+        gdl_libres = [x for x in range(self.Nnodos*3)]
+        gdl_fijos = []
+        
+        for node in self.restricciones:
+            for apoyo in self.restricciones[node]:
+                gdl = apoyo[0]
+                gdl_fijos.append(node*3+gdl)
+                
+        gdl_libres = list(set(gdl_libres)-set(gdl_fijos))
+        
+        self.Kff = self.K[np.ix_(gdl_libres,gdl_libres)]
+        self.Kcc = self.K[np.ix_(gdl_fijos,gdl_fijos)]
+        self.Kcf = self.K[np.ix_(gdl_fijos,gdl_libres)]
+        self.Kfc = self.K[np.ix_(gdl_libres,gdl_fijos)]
+        
+        self.u = np.zeros(self.Nnodos*3)
+        
+        self.uc = self.u[gdl_fijos]
+        
+        self.Ff = self.F[gdl_libres] - self.Kfc @ self.uc 
+        
+        self.u[gdl_libres]=solve(self.Kff,self.Ff)
+        
+        self.uf = self.u[gdl_libres]
+
+        self.R=self.Kcf @ self.uf + self.Kcc @ self.uc - self.F[gdl_fijos]
         
         return 0
 
@@ -160,18 +196,35 @@ class Reticulado(object):
 
 
 
-
-
     def __str__(self):
         
         s="nodos: \n"
         for i in range(self.Nnodos):
             s+=f"\t {i}: ({self.xyz[i][0]} {self.xyz[i][1]} {self.xyz[i][2]}) \n"
         s+="\n"
+        
         s+="barras: \n"
         for i,j in enumerate(self.barras,start=0):
             s+=f"\t {i}: [{j.ni} {j.nj}] \n"
         s+="\n"
+        
+        s+="restricciones: \n"
+        for i in self.restricciones:
+            s+="\t {i}: [self.restricciones[i]] \n"
+        s+="\n"
+        
+        s+="cargas: \n"
+        for i in self.cargas:
+            s+="\t {i}: [self.cargas[i]] \n"
+        s+="\n"
+        
+        s+="desplazamientos: \n"
+        for i in range(len(self.u)):
+            s+="\t {i}: (self.u[i]) \n"
+        s+="\n"
+        
+        s+="fuerzas: \n" 
+        
         
         return s
         
