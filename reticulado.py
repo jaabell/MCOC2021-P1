@@ -211,17 +211,17 @@ class Reticulado(object):
         
         s+="restricciones: \n"
         for i in self.restricciones:
-            s+="\t {i}: [self.restricciones[i]] \n"
+            s+=f"\t {i}: [self.restricciones[i]] \n"
         s+="\n"
         
         s+="cargas: \n"
         for i in self.cargas:
-            s+="\t {i}: [self.cargas[i]] \n"
+            s+=f"\t {i}: [self.cargas[i]] \n"
         s+="\n"
         
         s+="desplazamientos: \n"
         for i in range(len(self.u)):
-            s+="\t {i}: (self.u[i]) \n"
+            s+=f"\t {i}: (self.u[i]) \n"
         s+="\n"
         
         s+="fuerzas: \n" 
