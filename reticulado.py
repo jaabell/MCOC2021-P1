@@ -3,7 +3,7 @@ from scipy.linalg import solve
 
 class Reticulado(object):
     """Define un reticulado"""
-    __NNodosInit__ = 100
+    __NNodosInit__ = 1
 
     #constructor
     def __init__(self):
@@ -36,7 +36,7 @@ class Reticulado(object):
         
         
         numero_de_nodo_actual = self.Nnodos
-
+        self.xyz.resize((numero_de_nodo_actual+1,3))
         self.xyz[numero_de_nodo_actual,:] = [x, y, z]
 
         self.Nnodos += 1
@@ -181,8 +181,11 @@ class Reticulado(object):
     def obtener_fuerzas(self):
         
         """Implementar"""	
+        fuerzas_totales = []
+        for i in self.barras:
+            fuerzas_totales.append(i.obtener_fuerza(self))
         
-        return 0
+        return np.array(fuerzas_totales)
 
 
     def obtener_factores_de_utilizacion(self, f):
@@ -241,6 +244,9 @@ class Reticulado(object):
         s+="\n"
         
         s+="fuerzas: \n" 
+        for i,j in enumerate(self.barras,start=0):
+            s+=f"\t {i}: {j.obtener_fuerza(self)} \n"
+        s+="\n"
         
         
         return s

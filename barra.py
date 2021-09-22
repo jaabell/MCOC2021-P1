@@ -116,10 +116,10 @@ class Barra(object):
         
         u = ret.u
         
-        u_e = np.array([u[2*ni], u[2*ni+1], u[2*ni+2], u[2*nj], u[2*nj+1], u[2*nj+2]])
-        se = A*E_acero/L * T * u_e
+        u_e = np.array([[u[3*ni], u[3*ni+1], u[3*ni+2], u[3*nj], u[3*nj+1], u[3*nj+2]]])
+        se = A*E_acero/L * T @ u_e.T
         
-        return se
+        return se[0][0]
 
 
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
