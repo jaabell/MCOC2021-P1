@@ -17,11 +17,12 @@ class Reticulado(object):
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
+        self.fuerzas = []
         """Implementar"""
         
 
     def agregar_nodo(self, x, y, z=0):
-
+        self.xyz.resize((self.Nnodos + 1, 3))
         #print(f"Quiero agregar un nodo en ({x} {y} {z})")
         numero_de_nodo_actual = self.Nnodos
 
@@ -65,20 +66,20 @@ class Reticulado(object):
         
         if nodo in self.restricciones: 
         
-            self.restricciones[nodo]
+            self.restricciones[nodo].append([gdl, valor])
 
         else:
-            self.restricciones[nodo]=(gdl, valor)
+            self.restricciones[nodo]=[[gdl, valor]]
         
         return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
         if nodo in self.cargas:
 
-            self.cargas[nodo]
+            self.cargas[nodo].append([gdl, valor])
         
         else:
-            self.cargas[nodo]=(gdl, valor)	
+            self.cargas[nodo]=[[gdl, valor]]	
         
         return 0
 
@@ -86,9 +87,9 @@ class Reticulado(object):
 
     def ensamblar_sistema(self, factor_peso_propio=0):
         #Ensambar riguidez y vector de cargas
-        n=self.Nnodos*3 + 2
+        n=self.Nnodos*3
         self.k= np.zeros((n,n))
-        self.υ=np.zeros(n)
+        self.u=np.zeros(n)
         self.f=np.zeros(n)
         
         for e in self.barras: #aquí recorremos todas las barras
@@ -97,7 +98,7 @@ class Reticulado(object):
             nj= e.nj
             ke=e.obtener_rigidez(self)
             fe=e.obtener_vector_de_cargas(self)
-            d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]	
+            d= [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]
 
             #Método de riguidez directa
             for i in range(6):
@@ -105,70 +106,70 @@ class Reticulado(object):
                 for j in range(6):
                     q = d[j]
                     self.k[p,q]+=ke[i,j]
-                self.f[p]+=fe[i]
+                self.f[p] = fe[i]
 
+        #print(f"k = {self.k}")
         #Agregamos cargas puntuales
 
-        for n in self.cargas:
-            self.f[n*3 + self.cargas[n][0]] += self.cargas[n][1]
-       
+        #for n in self.cargas:
+        #    self.f[n*3 + self.cargas[n][0]] += self.cargas[n][1]
+        #print(f"f 2 = {self.f}")
         return 0
 
     def resolver_sistema(self):
 
-        contador = 0
-        for i in self.restricciones:
-            contador += self.restricciones[i][0]
-
-        gdl_libres = np.arange(contador)          #cant grados de libertad del sistema
+        gdl_libres = np.arange(self.Nnodos*3)          #cant grados de libertad del sistema
         gdl_fijos=[]
 
         #Vemos las restricciones, gdl y valores
         for i in self.restricciones:
-            gdl = self.restricciones[i][0]
-            valor = self.restricciones[i][1]
-            gdl_global = gdl + i*3
-            self.υ[gdl_global] += valor
-            gdl_fijos.append(gdl_global)
+            for j in self.restricciones[i]:
+                gdl = j[0]
+                valor = j[1]
+                gdl_global = gdl + i*3
+                self.u[gdl_global] += valor
+                gdl_fijos.append(gdl_global)
 
-        np.array(gdl_fijos)
+        gdl_fijos = np.array(gdl_fijos)
         gdl_libres = np.setdiff1d(gdl_libres, gdl_fijos)
 
         #Ahora con las cargas aplicadas al sistema (al igual como lo hicimos con ensamblar sistema)
         for n in self.cargas:
-            gdl = self.cargas[i][0]
-            valor = self.cargas[i][1]
-            gdl_global = gdl + n*3
-            self.f[gdl_global] += valor
+            for i in self.cargas[n]:
+                gdl = i[0]
+                valor = i[1]
+                gdl_global = gdl + n*3
+                self.f[gdl_global] += valor
 
         kff= self.k[np.ix_(gdl_libres, gdl_libres)]
         kcc= self.k[np.ix_(gdl_fijos, gdl_fijos)]
         kcf= self.k[np.ix_(gdl_fijos, gdl_libres)]
         kfc= self.k[np.ix_(gdl_libres, gdl_fijos)]
 
-        uf = self.υ[gdl_libres]
-        uc = self.υ[gdl_fijos]
-
+        uf = self.u[gdl_libres]
+        uc = self.u[gdl_fijos]
 
         ff = self.f[gdl_libres]
         fc = self.f[gdl_fijos]
 
-        r = solve(kff, ff-kfc*uc)
+        r = solve(kff, ff-kfc@uc)
         
-        self.υ[gdl_libres] = r
-        
+        self.u[gdl_libres] = r
+
         return 0
 
     def obtener_desplazamiento_nodal(self, n):
-        """Implementar"""	
-        
-        return 0
-
+        gdl = [3*n, 3*n+1, 3*n+2]
+        return self.u[gdl]	
 
     def obtener_fuerzas(self):
-        """Implementar"""	
-        
-        return 0
+        contador = 0
+        fz = np.zeros((len(self.barras)))
+        for i in self.barras:
+            fz[contador] = i.obtener_fuerza(self)
+            self.fuerzas.append(fz[contador])
+            contador +=1
+        return fz
 
 
     def obtener_factores_de_utilizacion(self, f):

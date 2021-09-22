@@ -36,7 +36,6 @@ class Barra(object):
         return self.seccion.area()
 
     def calcular_peso(self, reticulado):
-        """Implementar"""
         return ((self.calcular_area())*(self.calcular_largo(reticulado))*(ρ_acero)*(g_))
 
 
@@ -45,31 +44,40 @@ class Barra(object):
         L= self.calcular_largo(reticulado)
         ni=reticulado.obtener_coordenada_nodal(self.ni)
         nj=reticulado.obtener_coordenada_nodal(self.nj)
-        Lx=abs(nj[0]-ni[0])
-        Ly=abs(nj[1]-ni[1])
-        Lz=abs(nj[2]-ni[2])
+        Lx=(nj[0]-ni[0])
+        Ly=(nj[1]-ni[1])
+        Lz=(nj[2]-ni[2])
     
         cosθx=Lx/L
         cosθy=Ly/L
         cosθz=Lz/L
         T= np.array([[-cosθx], [-cosθy], [-cosθz], [cosθx], [cosθy], [cosθz]])
-        ke=(self.seccion.area()*E_acero/L) * T.T * T
+        ke=(self.seccion.area()*E_acero/L) * T * T.T
         return ke
 
     def obtener_vector_de_cargas(self, reticulado):
-        """Implementar"""	
         W = self.calcular_peso(reticulado)
         return -W/2 *np.array([0,0,1,0,0,1])
         #Si borro 1 de los ceros en cada trio, obtengo formato 2d
 
-
-
     def obtener_fuerza(self, reticulado):
-        """Implementar"""	
-        se=A*E_acero/L * T* u_e
+        u_e = np.zeros(2*3)
+        u_e[0:3] = reticulado.obtener_desplazamiento_nodal(self.ni)
+        u_e[3:] = reticulado.obtener_desplazamiento_nodal(self.nj)
+        L= self.calcular_largo(reticulado)
+        ni=reticulado.obtener_coordenada_nodal(self.ni)
+        nj=reticulado.obtener_coordenada_nodal(self.nj)
+        Lx=(nj[0]-ni[0])
+        Ly=(nj[1]-ni[1])
+        Lz=(nj[2]-ni[2])
+    
+        cosθx=Lx/L
+        cosθy=Ly/L
+        cosθz=Lz/L
+        T= np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])	
+        
+        se=self.calcular_area()*E_acero/L * T @ u_e
         return se
-
-
 
 
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
