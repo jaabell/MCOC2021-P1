@@ -3,7 +3,7 @@ from scipy.linalg import solve
 
 class Reticulado(object):
     """Define un reticulado"""
-    __NNodosInit__ = 100
+    __NNodosInit__ = 1
 
     #constructor
     def __init__(self):
@@ -36,7 +36,7 @@ class Reticulado(object):
         
         
         numero_de_nodo_actual = self.Nnodos
-
+        self.xyz.resize((numero_de_nodo_actual+1,3))
         self.xyz[numero_de_nodo_actual,:] = [x, y, z]
 
         self.Nnodos += 1
@@ -101,15 +101,25 @@ class Reticulado(object):
             d = [3*e.ni, 3*e.ni + 1, 3*e.ni + 2, 3*e.nj, 3*e.nj +1, 3*e.nj +2]
             ke = e.obtener_rigidez(self)
             fe = e.obtener_vector_de_cargas(self)
-            
+            if factor_peso_propio != [0.,0.,0.]:
+                    
+                    I1 = abs(factor_peso_propio[0])
+                    I2 = abs(factor_peso_propio[1])
+                    I3 = abs(factor_peso_propio[2])
+                    valor = fe[2]
+                    fe = [I1*valor, I2*valor, I3*valor, I1*valor, I2*valor, I3*valor ]
+                    
+            else:
+                fe = np.zeros(6)
+                
             for i in range (6):
                 p = d[i]
                 for j in range (6):
                     q = d[j]
                     self.K[p,q]+=ke[i,j]
+                self.F[p] += fe[i]    
+                
                     
-                if factor_peso_propio == [0., 0., 0.]:
-                    self.F[p] = fe[i]
             
                 
                 
@@ -123,7 +133,7 @@ class Reticulado(object):
         
         
         
-                
+              
         return 0
 
 
@@ -157,6 +167,8 @@ class Reticulado(object):
 
         self.R=self.Kcf @ self.uf + self.Kcc @ self.uc - self.F[gdl_fijos]
         
+        
+        
         return 0
 
     def obtener_desplazamiento_nodal(self, n):
@@ -169,8 +181,11 @@ class Reticulado(object):
     def obtener_fuerzas(self):
         
         """Implementar"""	
+        fuerzas_totales = []
+        for i in self.barras:
+            fuerzas_totales.append(i.obtener_fuerza(self))
         
-        return 0
+        return np.array(fuerzas_totales)
 
 
     def obtener_factores_de_utilizacion(self, f):
@@ -229,6 +244,9 @@ class Reticulado(object):
         s+="\n"
         
         s+="fuerzas: \n" 
+        for i,j in enumerate(self.barras,start=0):
+            s+=f"\t {i}: {j.obtener_fuerza(self)} \n"
+        s+="\n"
         
         
         return s
