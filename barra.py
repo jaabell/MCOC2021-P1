@@ -78,7 +78,7 @@ class Barra(object):
         cos_theta_neg_y = (xi[1]-xj[1])/L
         cos_theta_neg_z = (xi[2]-xj[2])/L
         #T = array([-cos(θ)x, -cos(θ)y, -cos(θ)z, cos(θ)x, cos(θ)y, cos(θ)z])
-        T = np.array([cos_theta_neg_x,cos_theta_neg_y,cos_theta_neg_z,-cos_theta_neg_x,-cos_theta_neg_y,-cos_theta_neg_z])
+        T = np.array([[cos_theta_neg_x,cos_theta_neg_y,cos_theta_neg_z,-cos_theta_neg_x,-cos_theta_neg_y,-cos_theta_neg_z]])
         
         return T
 
@@ -91,7 +91,7 @@ class Barra(object):
         T = self.obtener_T(ret)
         L = self.calcular_largo(ret)
         
-        ke = self.seccion.area()*E_acero/L * T.T @ T
+        ke = (self.seccion.area()*E_acero/L) * T.T @ T
         
         return ke #definir cosenos en funcion de los nodos y el largo 
     
@@ -100,7 +100,7 @@ class Barra(object):
         
         """Implementar"""
         W = self.calcular_peso(ret)      
-        return -W/2*np.array([0,1,0,1]) #definir W
+        return -W/2*np.array([0,0,1,0,0,1]) #definir W
 
 
     def obtener_fuerza(self, ret):
@@ -116,10 +116,10 @@ class Barra(object):
         
         #u = del reticulado - resolver sistema 
         
-        u_e = np.array([u[2*ni], u[2*ni+1], u[2*nj], u[2*nj+1]])
-        se = A*E_acero/L * T * u_e
+        #u_e = np.array([u[2*ni], u[2*ni+1], u[2*nj], u[2*nj+1]])
+        #se = A*E_acero/L * T * u_e
         
-        return se
+        #return se
 
 
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
