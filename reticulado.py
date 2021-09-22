@@ -3,7 +3,7 @@ from scipy.linalg import solve
 
 class Reticulado(object):
     """Define un reticulado"""
-    __NNodosInit__ = 3
+    __NNodosInit__ = 100
 
     #constructor
     def __init__(self):

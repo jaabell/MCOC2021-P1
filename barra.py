@@ -57,13 +57,9 @@ class Barra(object):
         
         return Peso
 
-
-
-
     def obtener_rigidez(self, ret):
         
-        
-        
+
         L = self.calcular_largo(ret)
         
         ni = self.ni
@@ -93,10 +89,10 @@ class Barra(object):
     def obtener_fuerza(self, ret):
         
         """Implementar"""	
-      
-        
-      
-        #FALTA IMPLEMENTAR EL u_e
+    
+        u_e = [0,0,0,0,0,0]
+        u_e[:3] = ret.obtener_desplazamiento_nodal(self.ni)
+        u_e[3:-1] = ret.obtener_desplazamiento_nodal(self.nj)
         A = self.seccion.area()
         L = self.calcular_largo(ret)
         

@@ -4,6 +4,7 @@ from constantes import g_, ρ_acero, mm_
 import pandas as pd
 import string
  
+ 
 class Circular(object):
      """define una seccion Circular"""
      
@@ -30,6 +31,7 @@ class Circular(object):
 
      def __str__(self):
         return f"Seccion Circular {self.nombre()}"
+
 
 
         
