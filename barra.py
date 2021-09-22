@@ -62,22 +62,62 @@ class Barra(object):
 
     def obtener_rigidez(self, ret):
         
-        """Implementar"""	
         
-        return 0
+        
+        L = self.calcular_largo(ret)
+        
+        ni = self.ni
+        nj = self.nj
+        
+        xi = ret.xyz[ni,:]
+        xj = ret.xyz[nj,:]
+        
+        Lx = (xi[0]-xj[0]) 
+        Ly = (xi[1]-xj[1]) 
+        Lz = (xi[2]-xj[2]) 
+        cosθx = Lx/L
+        cosθy = Ly/L
+        cosθz = Lz/L
+        
+        T=np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
+        ke = self.seccion.area()*E_acero/L*(T.T@T)
+        return ke
 
     def obtener_vector_de_cargas(self, ret):
         
         """Implementar"""	
-        
-        return 0
+        W = self.calcular_peso(ret)
+        return -W/2*np.array([0,0,1,0,0,1]) 
 
 
     def obtener_fuerza(self, ret):
         
         """Implementar"""	
+      
         
-        return 0
+      
+        #FALTA IMPLEMENTAR EL u_e
+        A = self.seccion.area()
+        L = self.calcular_largo(ret)
+        
+        ni = self.ni
+        nj = self.nj
+        
+        xi = ret.xyz[ni,:]
+        xj = ret.xyz[nj,:]
+        
+        Lx = (xi[0]-xj[0]) 
+        Ly = (xi[1]-xj[1]) 
+        Lz = (xi[2]-xj[2]) 
+        cosθx = Lx/L
+        cosθy = Ly/L
+        cosθz = Lz/L
+        
+        T=np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
+        
+        se = A*E_acero/L * T * u_e
+        
+        return se
 
 
 
