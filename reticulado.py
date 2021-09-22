@@ -73,19 +73,44 @@ class Reticulado(object):
         
         return self.barras
 
-
-
+  ##################################################  ENTREGA 3  
+    
+    
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
         
-        """Implementar"""	
+        
+        if nodo in self.restricciones:
+            self.restricciones[nodo].append = ([gdl, valor])
+        
+        else:
+            self.restricciones[nodo] = [[gdl, valor]]
         
         return 0
+        
+        # if no_existe_restriccion_pal_nodo:
+        #     self.restricciones[nodo] = []
+            
+        # self.restricciones[nodo].append(gdl, valor)
+        
+        # return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
         
-        """Implementar"""	
+               
+        if nodo in self.cargas:
+            self.cargas[nodo].append = ([gdl, valor])
         
+        else:
+            self.cargas[nodo] = [[gdl, valor]]
+     
         return 0
+
+        # if no_existe_fuerza_pal_nodo:
+        #     self.cargas[nodo] = []
+            
+        # self.cargas[nodo].append(gdl, valor)
+        
+        # return 0
 
 
     def ensamblar_sistema(self, factor_peso_propio=0.):
@@ -102,6 +127,11 @@ class Reticulado(object):
         
         return 0
 
+    
+    #################################################
+    
+    
+    
     def obtener_desplazamiento_nodal(self, n):
         
         """Implementar"""	
