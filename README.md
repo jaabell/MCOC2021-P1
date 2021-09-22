@@ -7,6 +7,6 @@ Para esta entrega se modificó barras.py y reticulado.py para llegar al mismo re
 
 # Entrega 2 - Creación de secciones ICHA  
 
+# Entrega 3 - Análisis de Reticulados  
 
-
-
+# Entrega 4 - Conversar con el profesor  
