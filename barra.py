@@ -53,24 +53,60 @@ class Barra(object):
         
         return area
     
-    def obtener_rigidez(self, ret):
+    def obtener_rigidez(self, ret): ############################
         
+        L = self.calcular_largo(ret)
+
+        ni = self.ni
+        nj = self.nj
+
+        xi = ret.xyz[ni,:]
+        xj = ret.xyz[nj,:]
+
+        Lx = xj[0]-xi[0]
+        Ly = xj[1]-xi[1]
+        Lz = xj[2]-xi[2]
+
         cosθx = Lx/L
         cosθy = Ly/L
         cosθz = Lz/L 
+
+        T = array([-cosθx,-cosθy,-cosθz,cosθx,cosθy,cosθz])
         
         ke =  self.seccion.area()*E_acero/L * T.T @ T
 
         return ke
 
-    def obtener_vector_de_cargas(self, ret):
+    def obtener_vector_de_cargas(self, ret): ######################
         
-        """Implementar"""	
-        
-        return -W/2*array([0,1,0,1])
+        W = self.calcular_peso(ret)
 
-    def obtener_fuerza(self, ret):
+        return -W/2*array([0,0,1,0,0,1])
+
+    def obtener_fuerza(self, ret):  #################################
+
+        T = array([-cosθx,-cosθy,-cosθz,cosθx,cosθy,cosθz])
+        A = self.seccion.area()
+        L = self.calcular_largo(ret)
         
+        ni = self.ni
+        nj = self.nj
+
+        u_e = np.zeros(6)
+        u_e[0,3] = ret.obtener_desplazamiento_nodal(ni)
+        u_e[3,6] = ret.obtener_desplazamiento_nodal(nj)
+
+        
+        xi = ret.xyz[ni,:]
+        xj = ret.xyz[nj,:]
+        Lx = xj[0]-xi[0]
+        Ly = xj[1]-xi[1]
+        Lz = xj[2]-xi[2]
+        
+        cosθx = Lx/L
+        cosθy = Ly/L
+        cosθz = Lz/L 
+
         se = A*E_acero/L*T*u_e
         
         return se
@@ -92,5 +128,4 @@ class Barra(object):
         """Implementar"""	
         
         return 0
-
 
