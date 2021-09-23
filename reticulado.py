@@ -153,5 +153,32 @@ class Reticulado(object):
             s+= f"\t {i}: [{j.ni} {j.nj}] \n"
         
         s+="\n"
+        s += "restricciones: \n"
+        fod i in self.restricciones:
+            s+= f"\t {i}: {self.restricciones[i]}\n"
+        
+        s+="\n"
+        s += "cargas: \n"
+        for i in self.cargas:
+            s+= f"\t {i}: {self.cargas[i]}\n"
+        return s
+
+        s+="\n"
+        s += "desplazamiento: \n"
+        x=0
+        y=0
+        while x < (len(self.u)):
+            s+=f"\t {y}: ({(self.u[x])}, {(self.u[x+1])}, {(self.u[x+2])}) \n"
+            x+=3
+            y+=1
+        
+        s+="\n"
+        s+="fuerzas: \n" 
+        for i,j in enumerate(self.barras,start=0):
+            s+=f"\t {i}: {j.agregar_fuerza(self)} \n"
+            
+        s+="\n"
         
         return s
+    
+
