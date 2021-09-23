@@ -142,7 +142,7 @@ class Reticulado(object):
         
         for k in self.cargas:
             for z in self.cargas[k]:
-                grado, valor = carga[0], carga[1]
+                grado, valor = z[0], z[1]
                 gdl_general = grado + self.Ndimensiones*k
                 self.f[gdl_general] = valor
       
