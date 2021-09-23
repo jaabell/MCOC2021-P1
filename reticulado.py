@@ -1,5 +1,9 @@
 import numpy as np
 from scipy.linalg import solve
+import scipy.linalg as lin
+import numpy as np
+from scipy.linalg import solve
+
 
 class Reticulado(object):
     """Define un reticulado"""
@@ -87,12 +91,8 @@ class Reticulado(object):
         
         return 0
         
-        # if no_existe_restriccion_pal_nodo:
-        #     self.restricciones[nodo] = []
-            
-        # self.restricciones[nodo].append(gdl, valor)
+     
         
-        # return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
         
@@ -117,21 +117,58 @@ class Reticulado(object):
         
         """Implementar"""	
         
+        #Deben quedar definidas al terminar esta funcion
+
+        
         return 0
 
-
+        
 
     def resolver_sistema(self):
         
-        """Implementar"""	
+        numero_grado_libertad = self.Nnodos * self.Ndimensiones
+        gdl_libres = np.arange(numero_grado_libertad)
+        gdl_fijos = []
         
+        for i in self.restricciones:
+             for restriccion in self.restricciones[i]:
+                  grado, valor = restriccion[0], restriccion[1]
+                  gdl_general = grado + self.Ndimensiones*i
+                  self.u[gdl_general] = valor
+                  gdl_fijos.append(gdl_general)
+        
+        gdl_fijos = np.array(gdl_fijos)
+        gdl_libres = np.setdiff1d(gdl_libres, gdl_fijos)
+        
+        for k in self.cargas:
+            for z in self.cargas[k]:
+                grado, valor = carga[0], carga[1]
+                gdl_general = grado + self.Ndimensiones*k
+                self.f[gdl_general] = valor
+      
+        Kff = self.K[np.ix_(gdl_libres, gdl_libres)]
+        Kcc = self.K[np.ix_(gdl_fijos,gdl_fijos)]
+        Kfc = self.K[np.ix_(gdl_libres,gdl_fijos)]
+        Kfc = self.K[np.ix_(gdl_fijos,gdl_libres)]
+        uf, uc = self.u[gdl_libres], self.u[gdl_fijos]
+        ff, fc = self.f[gdl_libres], self.f[gdl_fijos]
+        uf = solve(Kff, ff - Kfc @ uc)
+        R = Kcf@uf+Kcc@uc-fc
+        
+        ### FINALMENTE ###
+        self.u[gdl_libres] = uf
+        self.R = R
+        self.Kff = Kff
+        self.Kcc = Kcc
+        self.Kfc = Kfc
+        self.Kcf = Kcf
+       
+
         return 0
 
     
-    #################################################
-    
-    
-    
+
+ 
     def obtener_desplazamiento_nodal(self, n):
         
         """Implementar"""	
@@ -145,7 +182,7 @@ class Reticulado(object):
         
         return 0
 
-
+    #################################################
     def obtener_factores_de_utilizacion(self, f):
         
         """Implementar"""	
