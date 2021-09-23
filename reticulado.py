@@ -136,9 +136,9 @@ class Reticulado(object):
 
     def obtener_desplazamiento_nodal(self, n):
         
-        """Implementar"""   
+        d = [3*n, 3*n+1, 3*n+2]
         
-        return 0
+        return self.u[d]
 
 
     def obtener_fuerzas(self):
