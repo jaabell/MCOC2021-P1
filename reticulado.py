@@ -1,3 +1,4 @@
+
 import numpy as np
 from scipy.linalg import solve
 import scipy.linalg as lin
@@ -7,14 +8,14 @@ from scipy.linalg import solve
 
 class Reticulado(object):
     """Define un reticulado"""
-    __NNodosInit__ = 100
+    __NNodosInit__ = 1
 
     #constructor
     def __init__(self):
         super(Reticulado, self).__init__()
         
         print("Constructor de Reticulado")
-        self.Ndimensiones = 2
+        self.Ndimensiones = 3
         self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype=np.double)
         self.Nnodos = 0
         self.barras = []
@@ -31,7 +32,7 @@ class Reticulado(object):
 
         print(f"Quiero agregar un nodo en ({x} {y} {z})")
         numero_de_nodo_actual = self.Nnodos
-
+        self.xyz.resize((numero_de_nodo_actual + 1,3))
         self.xyz[numero_de_nodo_actual,:] = [x, y, z]
 
         self.Nnodos += 1

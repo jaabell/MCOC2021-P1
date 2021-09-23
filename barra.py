@@ -92,7 +92,7 @@ class Barra(object):
     
         u_e = [0,0,0,0,0,0]
         u_e[:3] = ret.obtener_desplazamiento_nodal(self.ni)
-        u_e[3:-1] = ret.obtener_desplazamiento_nodal(self.nj)
+        u_e[3:] = ret.obtener_desplazamiento_nodal(self.nj)
         A = self.seccion.area()
         L = self.calcular_largo(ret)
         
@@ -111,8 +111,8 @@ class Barra(object):
         
         T=np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
         
-        se = A*E_acero/L * T * u_e
-        
+        se = A*E_acero/L * T.T @ u_e
+        print (se)
         return se
 
 
