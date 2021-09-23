@@ -75,7 +75,7 @@ class Barra(object):
         cosθy = Ly/L
         cosθz = Lz/L
         
-        T=np.array([-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz])
+        T=np.array([[-cosθx, -cosθy, -cosθz, cosθx, cosθy, cosθz]])
         ke = self.seccion.area()*E_acero/L*(T.T@T)
         return ke
 

@@ -14,12 +14,13 @@ class Reticulado(object):
         super(Reticulado, self).__init__()
         
         print("Constructor de Reticulado")
-        
+        self.Ndimensiones = 2
         self.xyz = np.zeros((Reticulado.__NNodosInit__,3), dtype=np.double)
         self.Nnodos = 0
         self.barras = []
         self.cargas = {}
         self.restricciones = {}
+        
         """Implementar"""	
         
 
@@ -81,16 +82,15 @@ class Reticulado(object):
     
     
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
-        
-        
-        if nodo in self.restricciones:
-            self.restricciones[nodo].append = ([gdl, valor])
-        
-        else:
+
+        if nodo not in self.restricciones:
+           
             self.restricciones[nodo] = [[gdl, valor]]
+        else:
+            self.restricciones[nodo].append([gdl, valor])
+        
         
         return 0
-        
      
         
 
@@ -114,10 +114,37 @@ class Reticulado(object):
 
 
     def ensamblar_sistema(self, factor_peso_propio=0.):
+        #Ensamblar rigides y vector de cargas
+       
+        Ngdl = self.Nnodos * self.Ndimensiones
+
+        self.K = np.zeros((Ngdl,Ngdl), dtype=np.double)
+        self.f = np.zeros((Ngdl), dtype=np.double)
+        self.u = np.zeros((Ngdl), dtype=np.double)
         
-        """Implementar"""	
-        
-        #Deben quedar definidas al terminar esta funcion
+  
+
+    
+        for e in self.barras:   #recorrer barras
+            ni = e.ni
+            nj = e.nj
+            
+            k_e = e.obtener_rigidez(self)
+            f_e = e.obtener_vector_de_cargas(self)
+            
+            
+            d = [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]
+            
+            
+            #Aplicamos el metodo rigidez directa visto en los videos
+            
+            for i in range(6):
+                p = d[i]
+                for j in range(6):
+                    q = d[j]
+                    self.K[p,q] += k_e[i,j]
+                self.f[p] += f_e[i]        
+   
 
         
         return 0
@@ -182,9 +209,11 @@ class Reticulado(object):
 
     def obtener_fuerzas(self):
         
-        """Implementar"""	
-        
-        return 0
+        fuerzas = np.zeros((len(self.barras)), dtype=np.double)
+        for i,b in enumerate(self.barras):
+            fuerzas[i] = b.obtener_fuerza(self)
+
+        return fuerzas              
 
     #################################################
     def obtener_factores_de_utilizacion(self, f):
