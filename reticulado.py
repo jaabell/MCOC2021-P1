@@ -58,23 +58,51 @@ class Reticulado(object):
 
 
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
+         if nodo not in self.restricciones:
+            self.restricciones[nodo]
         
-        #if no_esxiste_restriccion_para _el_nodo: #?????
-        #self.restricciones[nodo]
-        #self.restricciones[nodo].append(gdl,valor)  
+        self.restricciones[nodo].append(gdl,valor)  
         
         return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
+        if nodo not in self.carga: 
+            self.cargas[nodo]
         
-        """Implementar"""   
-        
+        self.cargas[nodo].append(gdl,valor)  
+               
         return 0
 
 
     def ensamblar_sistema(self):
         
-        """Implementar"""   
+        Ngdl = self.Nnodos * self.Ndimensiones
+  
+          self.K = np.zeros((Ngdl,Ngdl), dtype=np.double)
+          self.f = np.zeros((Ngdl), dtype=np.double)
+          self.u = np.zeros((Ngdl), dtype=np.double)
+          
+          for i,b in enumerate(self.barras):
+              
+              k_e = b.obtener_rigidez(self)
+              f_e = tener_vector_de_cargas(self) 
+              
+              ni = barras.tener_conectividad()
+  			
+              nj = barras.obtener_conectividad()
+              
+              if self.Ndimensiones == 2:
+                  d = [2*ni, 2*ni+1, 2*nj, 2*nj+1]
+              else:
+  			  
+  			  
+                    d = [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]
+              for i in range(self.Ndimensiones*2):
+                  p = d[i]
+              for j in range(self.Ndimensiones*2):
+                  q = d[j]
+                      self.K[p,q] += k_e[i,j]
+                  self.f[p] = f_e[i] + factor_peso_propio   
         
         return 0
 
