@@ -262,6 +262,9 @@ class SeccionICHA(object):
         self.Iyy=Iyy
         return str(self.Iyy)
 
+    def nombre(self):
+        return self.denominacion
+
     def __str__(self):
         if self.perfil=="o" or self.perfil=="O":
             if self.area()=="nan" or self.peso()=="nan" or self.inercia_xx()=="nan":
