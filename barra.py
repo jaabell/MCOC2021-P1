@@ -71,21 +71,21 @@ class Barra(object):
         cosθy = Ly/L
         cosθz = Lz/L 
 
-        T = array([-cosθx,-cosθy,-cosθz,cosθx,cosθy,cosθz])
-        
-        ke =  self.seccion.area()*E_acero/L * T.T @ T
+        T = np.array([-cosθx,-cosθy,-cosθz,cosθx,cosθy,cosθz]).reshape((6,1))
+
+        ke =  self.seccion.area()*E_acero/L * (T @ T.T)
 
         return ke
 
-    def obtener_vector_de_cargas(self, ret): ######################
+    def obtener_vector_de_cargas(self, ret, factor_peso_propio): ######################
         
         W = self.calcular_peso(ret)
 
-        return -W/2*array([0,0,1,0,0,1])
+        return -W/2*np.array([factor_peso_propio[0],factor_peso_propio[1],factor_peso_propio[2],factor_peso_propio[0],factor_peso_propio[1],factor_peso_propio[2]])
 
     def obtener_fuerza(self, ret):  #################################
 
-        T = array([-cosθx,-cosθy,-cosθz,cosθx,cosθy,cosθz])
+        
         A = self.seccion.area()
         L = self.calcular_largo(ret)
         
@@ -93,9 +93,8 @@ class Barra(object):
         nj = self.nj
 
         u_e = np.zeros(6)
-        u_e[0,3] = ret.obtener_desplazamiento_nodal(ni)
-        u_e[3,6] = ret.obtener_desplazamiento_nodal(nj)
-
+        u_e[0:3] = ret.obtener_desplazamiento_nodal(ni) #Arreglar aca
+        u_e[3:6] = ret.obtener_desplazamiento_nodal(nj)
         
         xi = ret.xyz[ni,:]
         xj = ret.xyz[nj,:]
@@ -107,7 +106,9 @@ class Barra(object):
         cosθy = Ly/L
         cosθz = Lz/L 
 
-        se = A*E_acero/L*T*u_e
+        T = np.array([-cosθx,-cosθy,-cosθz,cosθx,cosθy,cosθz]).reshape((6,1))
+
+        se = A*E_acero/L*(T.T @ u_e)
         
         return se
 

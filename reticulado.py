@@ -3,7 +3,7 @@ from scipy.linalg import solve
 
 class Reticulado(object):
     """Define un reticulado"""
-    __NNodosInit__ = 100
+    __NNodosInit__ = 1
 
     #constructor
     def __init__(self):
@@ -15,17 +15,15 @@ class Reticulado(object):
         self.Nnodos = 0
         self.barras = []
         self.cargas = {}
+        self.Ndimensiones=3
         self.restricciones = {}
     
     def agregar_nodo(self, x, y, z=0):
         #print(f"Quiero agregar un nodo en ({x} {y} {z})")
         numero_de_nodo_actual = self.Nnodos
-        if self.Nnodos+1 > Reticulado.__NNodosInit__:
-            self.xyz.resize((self.Nnodos+1,3))
-            self.xyz[self.Nnodos,:] = [x, y, z]
-            self.Nnodos += 1
-            if z != 0.:
-                self.Ndimensiones = 3
+        self.xyz.resize((self.Nnodos+1,3))
+        self.xyz[self.Nnodos,:] = [x, y, z]
+        self.Nnodos += 1
     
     def agregar_barra(self, barra):
         
@@ -58,51 +56,48 @@ class Reticulado(object):
 
 
     def agregar_restriccion(self, nodo, gdl, valor=0.0):
-         if nodo not in self.restricciones:
-            self.restricciones[nodo]
-        
-        self.restricciones[nodo].append(gdl,valor)  
+        if nodo not in self.restricciones:
+            self.restricciones[nodo]=[]
+
+        self.restricciones[nodo].append([gdl,valor])  
         
         return 0
 
     def agregar_fuerza(self, nodo, gdl, valor):
-        if nodo not in self.carga: 
-            self.cargas[nodo]
+        if nodo not in self.cargas: 
+            self.cargas[nodo]=[]
         
-        self.cargas[nodo].append(gdl,valor)  
+        self.cargas[nodo].append([gdl,valor])  
                
         return 0
 
 
-    def ensamblar_sistema(self):
+    def ensamblar_sistema(self,factor_peso_propio):
         
         Ngdl = self.Nnodos * self.Ndimensiones
   
-          self.K = np.zeros((Ngdl,Ngdl), dtype=np.double)
-          self.f = np.zeros((Ngdl), dtype=np.double)
-          self.u = np.zeros((Ngdl), dtype=np.double)
+        self.K = np.zeros((Ngdl,Ngdl), dtype=np.double)
+        self.f = np.zeros((Ngdl), dtype=np.double)
+        self.u = np.zeros((Ngdl), dtype=np.double)
           
-          for i,b in enumerate(self.barras):
+        for i,b in enumerate(self.barras):
               
-              k_e = b.obtener_rigidez(self)
-              f_e = tener_vector_de_cargas(self) 
-              
-              ni = barras.tener_conectividad()
-  			
-              nj = barras.obtener_conectividad()
-              
-              if self.Ndimensiones == 2:
-                  d = [2*ni, 2*ni+1, 2*nj, 2*nj+1]
-              else:
-  			  
-  			  
-                    d = [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]
-              for i in range(self.Ndimensiones*2):
-                  p = d[i]
-              for j in range(self.Ndimensiones*2):
-                  q = d[j]
-                      self.K[p,q] += k_e[i,j]
-                  self.f[p] = f_e[i] + factor_peso_propio   
+            k_e = b.obtener_rigidez(self)
+            f_e = b.obtener_vector_de_cargas(self,factor_peso_propio) 
+            ni = b.ni
+            nj = b.nj
+            
+            if self.Ndimensiones == 2:
+                d = [2*ni, 2*ni+1, 2*nj, 2*nj+1]
+            else:
+  			    
+                d = [3*ni, 3*ni+1, 3*ni+2, 3*nj, 3*nj+1, 3*nj+2]
+            for i in range(self.Ndimensiones*2):
+                p = d[i]
+                for j in range(self.Ndimensiones*2):
+                    q = d[j]
+                    self.K[p,q] += k_e[i,j]
+                self.f[p] = f_e[i]  
         
         return 0
 
@@ -121,17 +116,20 @@ class Reticulado(object):
         gdl_libres = list(set(gdl_libres)-set(gdl_fijos))
         
         #for e in self.barras:
-        self.Kcc=self.K[np.ix_(gdl_fijos,gdl_fijos)]
-        self.Kff=self.K[np.ix_(gdl_libres,gdl_libres)]
         self.Kfc=self.K[np.ix_(gdl_libres,gdl_fijos)]
         self.Kcf=self.K[np.ix_(gdl_fijos,gdl_libres)]
-        self.u=np.zeros(self.Nnodos*3)
-        self.uf=self.u[gdl_libres]
+        self.Kcc=self.K[np.ix_(gdl_fijos,gdl_fijos)]
+        self.Kff=self.K[np.ix_(gdl_libres,gdl_libres)]
         self.uc=self.u[gdl_fijos]
-        self.uc=solve(self.Kff,self.Ff)
+        self.uf=self.u[gdl_libres]
         self.Ff=self.f[gdl_libres]-self.Kfc @ self.uc
         self.Fc=self.f[gdl_fijos]-self.Kcf @ self.uf
-        self.R= self.Kcc @ self.uc -self.Fc
+        #self.R= self.Kcc @ self.uc -self.Fc
+        self.u=np.zeros(self.Nnodos*3)
+        
+        
+        self.u[gdl_libres]=solve(self.Kff,self.Ff)
+        
         return 0
 
     def obtener_desplazamiento_nodal(self, n):
@@ -141,11 +139,12 @@ class Reticulado(object):
         return self.u[d]
 
 
-    def obtener_fuerzas(self):
-        
-        """Implementar"""   
-        
-        return 0
+    def obtener_fuerzas(self): #####################
+        f = []
+        for b in self.barras:
+            f.append(b.obtener_fuerza(self))
+        print(np.array(f))
+        return np.array(f)
 
 
     def obtener_factores_de_utilizacion(self, f):
@@ -182,7 +181,7 @@ class Reticulado(object):
         
         s+="\n"
         s += "restricciones: \n"
-        fod i in self.restricciones:
+        for i in self.restricciones:
             s+= f"\t {i}: {self.restricciones[i]}\n"
         
         s+="\n"
