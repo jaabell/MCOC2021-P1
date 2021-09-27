@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.linalg import solve
+import h5py
 
 class Reticulado(object):
     """Define un reticulado"""
@@ -209,8 +210,24 @@ class Reticulado(object):
         return 0
 
 
+    
+    def guardar(self, nombre):
+        fid=h5py.File(nombre,"w")
+        fid.create_dataset("xyz", dtype=np.double)
+        fid.create_dataset("barras", dtype=np.int32)
+        fid.create_dataset("secciones", (10,1), dtype=np.string_)
+        fid.create_dataset("restricciones", dtype=np.int32)
+        fid.create_dataset("restricciones_val", dtype=np.double)
+        fid.create_dataset("cargas", dtype=np.int32)
+        fid.create_dataset("cargass_val", dtype=np.double)
+        
+        
+        
+        
+        fid.close()
 
-
+    def abrir(self):
+        pass
 
     def __str__(self):
         

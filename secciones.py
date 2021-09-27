@@ -193,7 +193,7 @@ class SeccionICHA(object):
             B1=self.datos["B"].tolist()
             pes=self.datos["peso"].tolist()
             i=0
-            while i<len(d1):
+            while i<len(D1):
                 if D1[i]==float(sec[1]):
                     if B1[i]==float(sec[3]):
                         if pes[i]==float(sec[5]):
