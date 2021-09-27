@@ -64,7 +64,7 @@ for nodo in [2,7]:
 
 
 #Cargar el nodo 4 en la direccion 1 (Y)
-ret.agregar_fuerza(4, 2, -100*KN_)
+ret.agregar_fuerza(4, 2, -100*KN)
 
 #Visualizar y comprobar las secciones
 opciones_barras = {

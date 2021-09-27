@@ -213,13 +213,54 @@ class Reticulado(object):
     
     def guardar(self, nombre):
         fid=h5py.File(nombre,"w")
-        fid.create_dataset("xyz", dtype=np.double)
-        fid.create_dataset("barras", dtype=np.int32)
-        fid.create_dataset("secciones", (10,1), dtype=np.string_)
-        fid.create_dataset("restricciones", dtype=np.int32)
-        fid.create_dataset("restricciones_val", dtype=np.double)
-        fid.create_dataset("cargas", dtype=np.int32)
-        fid.create_dataset("cargass_val", dtype=np.double)
+        
+        fid.create_dataset("xyz", data = self.xyz)
+        #fid.create_dataset("xyz", dtype=np.double)
+        
+        
+        fid.create_dataset("barras", data = np.array([barra.obtener_conectividad() for barra in self.barras]))
+        #fid.create_dataset("barras", dtype=np.int32)
+        
+        #data=[]
+        #for barra in self.barras:
+        #    data.append(barra.conec)
+        #data=np.array(data)
+        
+        
+        fid.create_dataset("secciones", data = np.array([np.string_(barra.seccion.nombre()) for barra in self.barras]))
+        #fid.create_dataset("secciones", dtype=h5py.string_dtype())
+        
+        
+        rests = []
+        for nodo in self.restricciones:
+            for rest in self.restricciones[nodo]:
+                rests.append([nodo,rest[0]])
+        fid.create_dataset("restricciones", data = np.array(rests))
+        #fid.create_dataset("restricciones", dtype=np.int32)
+        
+        
+        rests_val = []
+        for nodo in self.restricciones:
+            for rest in self.restricciones[nodo]:
+                rests_val.append(rest[1])
+        fid.create_dataset("restricciones_val", data = np.array(rests_val))
+        #fid.create_dataset("restricciones_val", dtype=np.double)
+        
+        
+        cargas = []
+        for nodo in self.cargas:
+            for carg in self.cargas[nodo]:
+                cargas.append([nodo,carg[0]])
+        fid.create_dataset("cargas", data = np.array(cargas))
+        #fid.create_dataset("cargas", dtype=np.int32)
+        
+        
+        cargas_val = []
+        for nodo in self.cargas:
+            for cargval in self.cargas[nodo]:
+                cargas_val.append(cargval[1])
+        fid.create_dataset("cargas_val", data = np.array(cargas_val))
+        #fid.create_dataset("cargass_val", dtype=np.double)
         
         
         
