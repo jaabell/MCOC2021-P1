@@ -118,6 +118,11 @@ class Barra(object):
 
 
 
+    
+    
+    
+    
+    
     def chequear_diseño(self, Fu, ret, ϕ=0.9):
         
         """Implementar"""	
@@ -128,6 +133,9 @@ class Barra(object):
 
 
 
+    
+    
+    
     def obtener_factor_utilizacion(self, Fu, ϕ=0.9):
         
         """Implementar"""	
@@ -135,6 +143,11 @@ class Barra(object):
         return 0
 
 
+   
+
+    
+    
+    
     def rediseñar(self, Fu, ret, ϕ=0.9):
         
         """Implementar"""	
