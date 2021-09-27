@@ -15,8 +15,6 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
-
-
 #Opciones para nodos
 opc_nodos_default = {
     "marcador_nodos": "o", 
@@ -170,7 +168,8 @@ def ver_reticulado_3d(ret, fig=1,
     nueva_figura=True,
     tamaño_nueva_figura = [8, 6],
     zoom = 100,
-    deshabilitar_ejes=False
+    deshabilitar_ejes=False,
+    titulo=""
     ):
 
     if nueva_figura:
@@ -223,6 +222,8 @@ def ver_reticulado_3d(ret, fig=1,
         ax.yaxis._axinfo["grid"]['color'] =  (1,1,1,0)
         ax.zaxis._axinfo["grid"]['color'] =  (1,1,1,0)
         ax.set_axis_off()
+
+    plt.title(titulo)
 
     if llamar_show:
         plt.show()

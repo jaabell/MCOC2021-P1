@@ -160,7 +160,15 @@ class Barra(object):
         
         """Implementar"""	
         
-        return 0
+
+
+
+
+    def obtener_factor_utilizacion(self, Fu, ϕ=0.9):
+        A = self.seccion.area()
+        Fn = A * σy_acero
+
+        return abs(Fu) / (ϕ*Fn)
 
 
 
