@@ -23,7 +23,7 @@ for i in range(100):
 	secciones.resize((i+1,))  #hago crecer el dataset
 	secciones[i] = f"sec {i}"
 
-
+fid.close()
 
 
 

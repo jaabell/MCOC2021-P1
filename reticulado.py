@@ -213,21 +213,121 @@ class Reticulado(object):
     
     def guardar(self, nombre):
         fid=h5py.File(nombre,"w")
-        fid.create_dataset("xyz", dtype=np.double)
-        fid.create_dataset("barras", dtype=np.int32)
-        fid.create_dataset("secciones", (10,1), dtype=np.string_)
-        fid.create_dataset("restricciones", dtype=np.int32)
-        fid.create_dataset("restricciones_val", dtype=np.double)
-        fid.create_dataset("cargas", dtype=np.int32)
-        fid.create_dataset("cargass_val", dtype=np.double)
+        
+        fid.create_dataset("xyz", data = self.xyz)
+        #fid.create_dataset("xyz", dtype=np.double)
+        
+        
+        fid.create_dataset("barras", data = np.array([barra.obtener_conectividad() for barra in self.barras]))
+        #fid.create_dataset("barras", dtype=np.int32)
+        
+        #data=[]
+        #for barra in self.barras:
+        #    data.append(barra.conec)
+        #data=np.array(data)
+        
+        
+        fid.create_dataset("secciones", data = np.array([np.string_(barra.seccion.nombre()) for barra in self.barras]))
+        #fid.create_dataset("secciones", dtype=h5py.string_dtype())
+        
+        
+        rests = []
+        for nodo in self.restricciones:
+            for rest in self.restricciones[nodo]:
+                rests.append([nodo,rest[0]])
+        fid.create_dataset("restricciones", data = np.array(rests))
+        #fid.create_dataset("restricciones", dtype=np.int32)
+        
+        
+        rests_val = []
+        for nodo in self.restricciones:
+            for rest in self.restricciones[nodo]:
+                rests_val.append(rest[1])
+        fid.create_dataset("restricciones_val", data = np.array(rests_val))
+        #fid.create_dataset("restricciones_val", dtype=np.double)
+        
+        
+        cargas = []
+        for nodo in self.cargas:
+            for carg in self.cargas[nodo]:
+                cargas.append([nodo,carg[0]])
+        fid.create_dataset("cargas", data = np.array(cargas))
+        #fid.create_dataset("cargas", dtype=np.int32)
+        
+        
+        cargas_val = []
+        for nodo in self.cargas:
+            for cargval in self.cargas[nodo]:
+                cargas_val.append(cargval[1])
+        fid.create_dataset("cargas_val", data = np.array(cargas_val))
+        #fid.create_dataset("cargass_val", dtype=np.double)
         
         
         
         
         fid.close()
 
-    def abrir(self):
-        pass
+    def abrir(self, nombre):
+        fid=h5py.File(nombre,"r")
+        xyz=fid.get("xyz")
+        self.xyz=[]
+        i=0
+        while i < len(xyz):
+            a=[]
+            a.append(xyz[i][0])
+            a.append(xyz[i][1])
+            a.append(xyz[i][2])
+            self.xyz.append(a)
+            i+=1
+        print(self.xyz)    
+        
+        barras=fid.get("barras")
+        i=0
+        self.barras=[]
+        while i<len(barras):
+            a=[]
+            a.append(barras[0])
+            a.append(barras[1])
+            self.barras.append(a)
+            i+=1
+        
+        
+        secciones=fid.get("secciones")
+        self.secciones=[]
+        i=0
+        while i<len(secciones):
+            self.secciones.append(secciones[i])
+            i+=1
+        
+        self.restricciones=[]
+        restricciones=fid.get("restricciones")
+        restricciones_val=fid.get("restricciones")
+        i=0
+        while i < len(restricciones):
+            a=[]
+            a.append(restricciones[i][0])
+            a.append(restricciones[i][1])
+            a.append(restricciones_val[i][1])
+            
+            self.restricciones.append(a)
+            
+            i+=1
+            
+        
+        self.cargas=[]
+        cargas=fid.get("cargas")
+        cargas_val=fid.get("cargas_val")
+        i=0
+        while i<len(cargas):
+            a=[]
+            a.append(cargas[i][0])
+            a.append(cargas[i][1])
+            a.append(cargas_val[i])
+            
+            self.cargas.append(a)
+            
+            i+=1
+        
 
     def __str__(self):
         
