@@ -2,6 +2,7 @@ import numpy as np
 from scipy.linalg import solve
 import h5py
 from barra import Barra
+from secciones import SeccionICHA
 
 class Reticulado(object):
     """Define un reticulado"""
@@ -269,29 +270,39 @@ class Reticulado(object):
         fid.close()
 
     def abrir(self, nombre):
-        fid=h5py.File(nombre,"r")
-        xyz=fid.get("xyz")
+        fid = h5py.File(nombre,"r")
+        xyz = np.array(fid.get("xyz"))
+        
         i=0
         while i<len(xyz):
             self.agregar_nodo(xyz[i][0],xyz[i][1],xyz[i][2])
             i+=1
         
-        barras=fid.get("barras")
-        secciones=fid.get("secciones")
+        barras = np.array(fid.get("barras"))
+        secciones = np.array(fid.get("secciones"))
+        secciones = [sec.decode() for sec in secciones]
+        
+        secciones_unicas=set(secciones)
+        dic_secciones = {}
+        
+        for sec in secciones_unicas:
+            dic_secciones[sec] = SeccionICHA(sec, color="#3A8431")
+            
+            
         i=0
         while i<len(barras):
-            self.agregar_barra(Barra(barras[i][0],barras[i][1],secciones[i]))
+            self.agregar_barra(Barra(barras[i][0],barras[i][1],dic_secciones[secciones[i]]))
             i+=1
         
-        restricciones=fid.get("restricciones")
-        restricciones_val=fid.get("restricciones_val")
+        restricciones = np.array(fid.get("restricciones"))
+        restricciones_val = np.array(fid.get("restricciones_val"))
         i=0
         while i < len(restricciones):
             self.agregar_restriccion(restricciones[i][0],restricciones[i][1],restricciones_val[i])
             i+=1
             
-        cargas=fid.get("cargas")
-        cargas_val=fid.get("cargas_val")
+        cargas = np.array(fid.get("cargas"))
+        cargas_val = np.array(fid.get("cargas_val"))
         i=0
         while i<len(cargas_val):
             self.agregar_fuerza(cargas[i][0],cargas[i][1],cargas_val[i])

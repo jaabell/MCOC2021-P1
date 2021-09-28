@@ -126,6 +126,7 @@ def graficar_barras(ret, fig, opciones):
                 c = xi*c_max + (1-xi)*c_cero
 
         if opciones["color_barras_por_seccion"]:
+            print("b.seccion = ", b.seccion)
             c = b.seccion.color
 
         ax.plot(x,y,z,
