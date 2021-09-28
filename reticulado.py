@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.linalg import solve
 import h5py
+from barra import Barra
 
 class Reticulado(object):
     """Define un reticulado"""
@@ -270,62 +271,30 @@ class Reticulado(object):
     def abrir(self, nombre):
         fid=h5py.File(nombre,"r")
         xyz=fid.get("xyz")
-        self.xyz=[]
         i=0
-        while i < len(xyz):
-            a=[]
-            a.append(xyz[i][0])
-            a.append(xyz[i][1])
-            a.append(xyz[i][2])
-            self.xyz.append(a)
+        while i<len(xyz):
+            self.agregar_nodo(xyz[i][0],xyz[i][1],xyz[i][2])
             i+=1
-        print(self.xyz)    
         
         barras=fid.get("barras")
-        i=0
-        self.barras=[]
-        while i<len(barras):
-            a=[]
-            a.append(barras[0])
-            a.append(barras[1])
-            self.barras.append(a)
-            i+=1
-        
-        
         secciones=fid.get("secciones")
-        self.secciones=[]
         i=0
-        while i<len(secciones):
-            self.secciones.append(secciones[i])
+        while i<len(barras):
+            self.agregar_barra(Barra(barras[i][0],barras[i][1],secciones[i]))
             i+=1
         
-        self.restricciones=[]
         restricciones=fid.get("restricciones")
-        restricciones_val=fid.get("restricciones")
+        restricciones_val=fid.get("restricciones_val")
         i=0
         while i < len(restricciones):
-            a=[]
-            a.append(restricciones[i][0])
-            a.append(restricciones[i][1])
-            a.append(restricciones_val[i][1])
-            
-            self.restricciones.append(a)
-            
+            self.agregar_restriccion(restricciones[i][0],restricciones[i][1],restricciones_val[i])
             i+=1
             
-        
-        self.cargas=[]
         cargas=fid.get("cargas")
         cargas_val=fid.get("cargas_val")
         i=0
-        while i<len(cargas):
-            a=[]
-            a.append(cargas[i][0])
-            a.append(cargas[i][1])
-            a.append(cargas_val[i])
-            
-            self.cargas.append(a)
-            
+        while i<len(cargas_val):
+            self.agregar_fuerza(cargas[i][0],cargas[i][1],cargas_val[i])
             i+=1
         
 
