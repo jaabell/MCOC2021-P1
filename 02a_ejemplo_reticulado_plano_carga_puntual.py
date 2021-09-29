@@ -1,3 +1,11 @@
+
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Sep 13 10:36:11 2021
+
+@author: Sangui
+"""
+
 from reticulado import Reticulado
 from barra import Barra
 from graficar2d import ver_reticulado_2d
@@ -69,5 +77,4 @@ opciones_barras = {
 	"ver_fuerza_en_barras" : True
 }
 ver_reticulado_2d(ret, 
-	opciones_nodos=opciones_nodos, 
-	opciones_barras=opciones_barras)
+	opciones_nodos=opciones_nodos)
