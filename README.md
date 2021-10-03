@@ -16,6 +16,7 @@ R: Eran bastante bajos, la barra mas utilizada, quer eran las laterales del tabl
 Las deformaciones eran bastante bajas por la sobre-deformación.
 
 
+## 
 Para reducir el peso del puente se cambiaron algunas secciones por unas que tienen secciones mas grandes o mas pequeñas.
 Al principio el peso del puente era de aproximadamente 900 toneladas. En este punto se estaban utilizando 2 secciones para las barras del puente. Luego, se agrego una seccion mediana y se fue iterando los tipos de secciones probando distintas secciones, pesos y dimensiones, la cual permitio bajar el peso del puente hasta 400 toneladas.
 Al ver que el peso no variaba mucho mas a medida que variaban las secciones se decidio incluir otra seccion pequeña, que fuera mayor a la mas chica pero que a la ver fuera menor a la mediana. En esta seccion se fue iterando las dimensiones, peso y tipo hasta encontrar un optimo, el cual era de 200 toneladas.
