@@ -4,8 +4,8 @@ from graficar3d import ver_reticulado_3d
 from constantes import *
 from math import sqrt
 from secciones import SeccionICHA
-
-L = 6.*m_
+import math
+L = 5.*m_
 H = 3.*m_
 B = 4.*m_
 
@@ -16,58 +16,222 @@ F = B*L*q
 #Inicializar modelo
 ret = Reticulado()
 
+# #Nodos
+# ret.agregar_nodo(0    ,0,0)
+# ret.agregar_nodo(L    ,0,0)
+# ret.agregar_nodo(2*L  ,0,0)
+# ret.agregar_nodo(L/2  ,B/2,sqrt(3)*H)
+# ret.agregar_nodo(3*L/2,B/2,sqrt(3)*H)
+# ret.agregar_nodo(0    ,B,0)
+# ret.agregar_nodo(L    ,B,0)
+# ret.agregar_nodo(2*L  ,B,0)
 #Nodos
+
+"""Linea nodo 1"""
 ret.agregar_nodo(0    ,0,0)
-ret.agregar_nodo(L    ,0,0)
-ret.agregar_nodo(2*L  ,0,0)
-ret.agregar_nodo(L/2  ,B/2,sqrt(3)*H)
-ret.agregar_nodo(3*L/2,B/2,sqrt(3)*H)
-ret.agregar_nodo(0    ,B,0)
-ret.agregar_nodo(L    ,B,0)
-ret.agregar_nodo(2*L  ,B,0)
 
+i=0
+l=3.74
+while i<=110:
+    ret.agregar_nodo(l,0,0)
+    l+=5
+    i+=5
+ret.agregar_nodo(117.48    ,0,0)
+"""Linea nodos 2"""
+i=0
+l=3.74
+ang=45
+z=l*math.tan(math.radians(ang))
+while i<=110:
+    ret.agregar_nodo(l,0,-z)
+    l+=5
+    i+=5
 
+"""Linea nodo 3"""
+ret.agregar_nodo(0,4,0)
+
+i=0
+l=3.74
+while i<=110:
+    ret.agregar_nodo(l,4,0)
+    l+=5
+    i+=5
+ret.agregar_nodo(117.48,4,0)
+"""Linea nodos 4"""
+i=0
+l=3.74
+ang=45
+z=l*math.tan(math.radians(ang))
+while i<=110:
+    ret.agregar_nodo(l,4,-z)
+    l+=5
+    i+=5
 
 
 #Secciones de las barras
 
-seccion_grande = SeccionICHA("[]350x150x37.8", color="#3A8431")#, debug=True)
-seccion_chica = SeccionICHA("[]80x40x8", color="#A3500B")
+seccion_grande_XL = SeccionICHA("H900x300x143.5", color="#3A8431")#, debug=True)
+seccion_grande = SeccionICHA("H900x300x134.4", color="#3A8431")#, debug=True)
+seccion_mediana = SeccionICHA("H800x300x126.5", color="#3A8431")#, debug=True)
+seccion_chica_XL = SeccionICHA("H450x150x35.9", color="#3A8431")#, debug=True)
+seccion_chica = SeccionICHA("[]12x12x0.3", color="#A3500B")
 
 
-#Crear y agregar las barras
-ret.agregar_barra(Barra(0, 1, seccion_chica)) #0
-ret.agregar_barra(Barra(1, 2, seccion_chica)) #1
-ret.agregar_barra(Barra(3, 4, seccion_grande)) #2
-ret.agregar_barra(Barra(0, 3, seccion_grande)) #3
-ret.agregar_barra(Barra(3, 1, seccion_chica)) #4
-ret.agregar_barra(Barra(1, 4, seccion_chica)) #5
-ret.agregar_barra(Barra(4, 2, seccion_grande)) #6
-ret.agregar_barra(Barra(5, 6, seccion_chica)) #7
-ret.agregar_barra(Barra(6, 7, seccion_chica)) #8
-ret.agregar_barra(Barra(5, 3, seccion_grande)) #9
-ret.agregar_barra(Barra(3, 6, seccion_chica)) #10
-ret.agregar_barra(Barra(6, 4, seccion_chica)) #11
-ret.agregar_barra(Barra(4, 7, seccion_grande)) #12
-ret.agregar_barra(Barra(0, 5, seccion_chica)) #13
-ret.agregar_barra(Barra(1, 6, seccion_chica)) #14
-ret.agregar_barra(Barra(2, 7, seccion_chica)) #15
-ret.agregar_barra(Barra(0, 6, seccion_chica)) #15
-ret.agregar_barra(Barra(1, 5, seccion_chica)) #15
-ret.agregar_barra(Barra(6, 2, seccion_chica)) #15
-ret.agregar_barra(Barra(1, 7, seccion_chica)) #15
+"""Barras abajo"""
+i=0
+while i <= 23:
+    ret.agregar_barra(Barra(i,i+1,seccion_grande))
+    i+=1
+    
+#i=25
+#while i<=46:
+#    ret.agregar_barra(Barra(i,i+1,seccion_grande))
+#    i+=1
 
+i=25
+while i<=46:
+    ret.agregar_barra(Barra(i,i+1,seccion_grande_XL))
+    i+=1
+
+#i=48
+#while i<=71:
+#    ret.agregar_barra(Barra(i,i+1,seccion_grande))
+#    i+=1
+
+i=48
+while i<=71:
+    ret.agregar_barra(Barra(i,i+1,seccion_mediana))
+    i+=1    
+
+
+i=73
+while i<=94:
+    #ret.agregar_barra(Barra(i,i+1,seccion_grande))
+    ret.agregar_barra(Barra(i,i+1,seccion_mediana))
+    i+=1
+
+"""Barras profundidad"""
+i=0
+p=48
+while i<=24:
+    #ret.agregar_barra(Barra(i,p,seccion_grande))
+    ret.agregar_barra(Barra(i,p,seccion_chica))
+    i+=1
+    p+=1
+    
+i=25
+p=73
+while i<=47:
+    #ret.agregar_barra(Barra(i,p,seccion_grande))
+    ret.agregar_barra(Barra(i,p,seccion_chica))
+    i+=1
+    p+=1
+
+
+"""Barras altura"""
+ret.agregar_barra(Barra(0,25,seccion_grande))
+i=1
+p=25
+while i<=23:
+    #ret.agregar_barra(Barra(i,p,seccion_grande))
+    #ret.agregar_barra(Barra(i,p,seccion_mediana))
+    ret.agregar_barra(Barra(i,p,seccion_chica_XL))
+    i+=1
+    p+=1
+
+#ret.agregar_barra(Barra(24,47,seccion_grande))
+#ret.agregar_barra(Barra(24,47,seccion_mediana))
+ret.agregar_barra(Barra(24,47,seccion_chica_XL))
+#ret.agregar_barra(Barra(48,73,seccion_grande))
+#ret.agregar_barra(Barra(48,73,seccion_mediana))
+ret.agregar_barra(Barra(48,73,seccion_chica_XL))
+
+i=49
+p=73
+while i<=71:
+    #ret.agregar_barra(Barra(i,p,seccion_grande))
+    ret.agregar_barra(Barra(i,p,seccion_mediana))
+    i+=1
+    p+=1
+
+#ret.agregar_barra(Barra(72,95,seccion_grande))
+#ret.agregar_barra(Barra(72,95,seccion_mediana))
+ret.agregar_barra(Barra(72,95,seccion_chica_XL))
+
+"""Diagonales planta"""
+i=0
+p=48
+while i<24:
+    ret.agregar_barra(Barra(i,p+1,seccion_chica))
+    ret.agregar_barra(Barra(i+1,p,seccion_chica))
+    i+=1
+    p+=1
+    
+"""Diagonales techo"""
+i=25
+p=73
+while i<47:
+    ret.agregar_barra(Barra(i,p+1,seccion_chica))
+    ret.agregar_barra(Barra(i+1,p,seccion_chica))
+    i+=1
+    p+=1
+#Secciones de las barras
+
+# seccion_grande = SeccionICHA("[]350x150x37.8", color="#3A8431")#, debug=True)
+
+
+
+"""Barras diagonales laterales"""
+
+i=1
+p=25
+while i<=22:
+    #ret.agregar_barra(Barra(i+1,p,seccion_grande))
+    #ret.agregar_barra(Barra(i+1,p,seccion_mediana))
+    ret.agregar_barra(Barra(i+1,p,seccion_chica_XL))
+    #ret.agregar_barra(Barra(i,p+1,seccion_grande))
+    #ret.agregar_barra(Barra(i,p+1,seccion_mediana))
+    ret.agregar_barra(Barra(i,p+1,seccion_chica_XL))
+    i+=1
+    p+=1
+
+i=49
+p=73
+while i<=70:
+    #ret.agregar_barra(Barra(i+1,p,seccion_grande))
+    #ret.agregar_barra(Barra(i+1,p,seccion_mediana))
+    ret.agregar_barra(Barra(i+1,p,seccion_chica_XL))
+    #ret.agregar_barra(Barra(i,p+1,seccion_grande))
+    #ret.agregar_barra(Barra(i,p+1,seccion_mediana))
+    ret.agregar_barra(Barra(i,p+1,seccion_chica_XL))
+    i+=1
+    p+=1
+
+"""Diagonales por puente"""
+i=1
+p=73
+while i<=23:
+    ret.agregar_barra(Barra(i,p,seccion_chica))
+    i+=1
+    p+=1
+
+i=49
+p=25
+while i<=71:
+    ret.agregar_barra(Barra(i,p,seccion_chica))
+    i+=1
+    p+=1
 
 #Crear restricciones
-for nodo in [0,5]:
-	ret.agregar_restriccion(nodo, 0, 0)
-	ret.agregar_restriccion(nodo, 1, 0)
-	ret.agregar_restriccion(nodo, 2, 0)
+for nodo in [0,48]:
+     ret.agregar_restriccion(nodo, 0, 0)
+     ret.agregar_restriccion(nodo, 1, 0)
+     ret.agregar_restriccion(nodo, 2, 0)
 
-for nodo in [2,7]:
-	ret.agregar_restriccion(nodo, 1, 0)
-	ret.agregar_restriccion(nodo, 2, 0)
-
+for nodo in [24,72]:
+     ret.agregar_restriccion(nodo, 1, 0)
+     ret.agregar_restriccion(nodo, 2, 0)
+     
 
 
 
@@ -88,13 +252,30 @@ ret.resolver_sistema()
 f_D = ret.obtener_fuerzas()
 
 
-#Agregar fuerzas tablero
-ret.agregar_fuerza(0, 2, -F/4)
-ret.agregar_fuerza(5, 2, -F/4)
-ret.agregar_fuerza(2, 2, -F/4)
-ret.agregar_fuerza(7, 2, -F/4)
-ret.agregar_fuerza(1, 2, -F/2)
-ret.agregar_fuerza(6, 2, -F/2)
+# Agregar fuerzas tablero
+F1 = B*q*(3.74*m_)
+ret.agregar_fuerza(0, 2, -F1/4)
+ret.agregar_fuerza(48, 2, -F1/4)
+ret.agregar_fuerza(24, 2, -F1/4)
+ret.agregar_fuerza(72, 2, -F1/4)
+
+#agregar fuerza a nodo inicial
+Ft = F1/4 + F/4
+ret.agregar_fuerza(1, 2, -Ft)
+ret.agregar_fuerza(49, 2, -Ft)
+ret.agregar_fuerza(23, 2, -Ft)
+ret.agregar_fuerza(71, 2, -Ft)
+
+#resto de nodos
+i=2
+while i<23:
+    ret.agregar_fuerza(i,2,-F/2)
+    i+=1
+    
+i=49+1
+while i<71:
+    ret.agregar_fuerza(i,2,-F/2)
+    i+=1
 
 #Resolver el problema peso_propio
 ret.ensamblar_sistema(factor_peso_propio=[0.,0.,0], factor_cargas=1.0)
@@ -114,10 +295,10 @@ opciones_barras = {
 	"dato":f_L
 }
 
-ver_reticulado_3d(ret, 
-	opciones_nodos=opciones_nodos, 
-	opciones_barras=opciones_barras,
-	titulo="Carga Viva")
+# ver_reticulado_3d(ret, 
+# 	opciones_nodos=opciones_nodos, 
+# 	opciones_barras=opciones_barras,
+# 	titulo="Carga Viva")
 
 
 #Visualizar f_L en el reticulado
@@ -131,10 +312,10 @@ opciones_barras = {
 	"dato":f_D
 }
 
-ver_reticulado_3d(ret, 
-	opciones_nodos=opciones_nodos, 
-	opciones_barras=opciones_barras,
-	titulo="Carga Muerta")
+# ver_reticulado_3d(ret, 
+# 	opciones_nodos=opciones_nodos, 
+# 	opciones_barras=opciones_barras,
+# 	titulo="Carga Muerta")
 
 
 #Calcular carga ultima (con factores de mayoracion)
@@ -153,10 +334,10 @@ opciones_barras = {
 	"dato":fu
 }
 
-ver_reticulado_3d(ret, 
-	opciones_nodos=opciones_nodos, 
-	opciones_barras=opciones_barras,
-	titulo="1.2D + 1.6L")
+# ver_reticulado_3d(ret, 
+# 	opciones_nodos=opciones_nodos, 
+# 	opciones_barras=opciones_barras,
+# 	titulo="1.2D + 1.6L")
 
 
 
@@ -193,3 +374,11 @@ ver_reticulado_3d(ret,
 
 
 ret.guardar("05_ejemplo_chequear_diseño.h5")
+
+
+
+
+
+
+
+
