@@ -1,17 +1,17 @@
-# MCOC2021-P1
+## MCOC2021-P1
 Optimización estructural de un puente reticular
 
 
-Cual fue su diseño inicial?
+# Cual fue su diseño inicial?
 R: El diseño inicial, consistia en un enrejado tipo Pratt invertido, restrigiendo todos los GDL mediante barras cruzadas,
 utilizando la sección tipo cajon mas grande posible
 
 
-Cuanto pesaba?
+# Cuanto pesaba?
 R: 800 toneladas aproximadamente
 
 
-Como eran los factores de utilización y deformaciones?
+# Como eran los factores de utilización y deformaciones?
 R: Eran bastante bajos, la barra mas utilizada, quer eran las laterales del tablero, tenian un factor de 0.1.
 Las deformaciones eran bastante bajas por la sobre-deformación.
 
